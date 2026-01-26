@@ -1,0 +1,11 @@
+# --- Node / React ---
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+npm-debug.log*
+
+# --- OS / IDEs ---
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
