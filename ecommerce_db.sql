@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS user;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  user_id int NOT NULL,
+  user_id int NOT NULL AUTO_INCREMENT,
   username varchar(45) NOT NULL,
   email varchar(100) NOT NULL,
   password_hash varchar(100) NOT NULL,
   is_admin tinyint NOT NULL,
-  created_at datetime DEFAULT NULL,
+  created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id),
   UNIQUE KEY user_id_UNIQUE (user_id),
   UNIQUE KEY username_UNIQUE (username),
