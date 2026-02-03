@@ -12,4 +12,3 @@ backend/config.py
 .vscode/
 .idea/
 Thumbs.db
-backend/config.py
