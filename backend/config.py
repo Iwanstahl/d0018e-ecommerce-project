@@ -3,6 +3,6 @@
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '031021',
+    'password': '03102142',
     'database': 'ecommerce-db'
 }
