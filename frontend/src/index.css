@@ -1,15 +1,30 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+@import "tailwindcss";
 
 :root {
-  --main-text-color: #1e1307; 
+  --main-text-color: #1f1305; 
   --second-text-color: #ede0d0;
+  --hover-color: #f1730c;
+  --highlight-color: #f1730c;
 }
 
 @layer base {
   body {
     font-family: 'Questrial', sans-serif;
+    background-color: var(--second-text-color);
     color: var(--main-text-color);
     color: var(--second-text-color);
+    color: var(--hover-color);
+    color: var(--highlight-color);
   }
+}
+
+a.active hr{
+  display: block;
+}
+
+.questrial-regular {
+  font-family: "Questrial", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
