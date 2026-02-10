@@ -62,7 +62,7 @@ export const ShopContextProvider = (props) => {
             price: 14500,
             description: "Akustisk gitarr med kristallklart ljud och inbyggd elektronik.",
             category_name: "Guitars",
-            stock: 4,
+            stock: 0,
             image: "taylor_acoustic.jpg"
         },
         {

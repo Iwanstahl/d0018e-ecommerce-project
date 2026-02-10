@@ -16,15 +16,59 @@
     color: var(--second-text-color);
     color: var(--hover-color);
     color: var(--highlight-color);
+    }
+  
+  /* BASE FONT */
+  .questrial-regular {
+    font-family: "Questrial", sans-serif;
+    font-weight: 400;
+    font-style: normal;
   }
-}
 
-a.active hr{
-  display: block;
-}
+  a.active hr{
+    display: block;
+  }
+  
+  /* CHECKBOX STYLING */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
 
-.questrial-regular {
-  font-family: "Questrial", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23ede0d0'%3E%3Cpath d='M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23f1730c'%3E%3Cpath d='m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z'/%3E%3C/svg%3E");
+  }
+
+  input[type="checkbox"]:active {
+    transform: scale(0.9);
+  }
+
+  /* ANIMATED TEXT */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+
+
+
+
+
 }
