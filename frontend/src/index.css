@@ -4,6 +4,7 @@
 :root {
   --main-text-color: #1f1305; 
   --second-text-color: #ede0d0;
+  --hover-text-color: #5c4d3c;
   --hover-color: #f1730c;
   --highlight-color: #f1730c;
 }
@@ -14,6 +15,7 @@
     background-color: var(--second-text-color);
     color: var(--main-text-color);
     color: var(--second-text-color);
+    color: var(--hover-text-color);
     color: var(--hover-color);
     color: var(--highlight-color);
     }

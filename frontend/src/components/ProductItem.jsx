@@ -8,7 +8,7 @@ const ProductItem = ({ product_id, name, price, image, category_name, stock }) =
   
     return (
         <Link className='text-(--main-text-color) cursor-pointer' to={`/product/${product_id}`}>
-            <div className='aspect-square overflow-hidden bg-gray-100 rounded-lg'>
+            <div className='aspect-square overflow-hidden bg-(--second-text-color)'>
                 <img 
                     className='hover:scale-110 transition ease-in-out object-cover w-full h-full' 
                     src={imagePath} 
