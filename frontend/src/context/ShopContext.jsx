@@ -5,7 +5,10 @@ export const ShopContext = createContext(null);
 export const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
+
   const currency = "kr"
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -110,7 +113,7 @@ export const ShopContextProvider = (props) => {
     fetchProducts();
   }, []);
 
-  const contextValue = { products, loading, currency };
+  const contextValue = { products, loading, currency, showSearch, setShowSearch };
 
   return (
     <ShopContext.Provider value={contextValue}>
