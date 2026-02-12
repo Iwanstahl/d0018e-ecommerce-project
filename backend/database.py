@@ -1,13 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from dotenv import load_dotenv
-import os
 
 
-load_dotenv()
-
-URL_DATABASE = os.getenv("URL_DATABASE")
+#Ändra URL_DATABASE med dina egna databasuppgifter
+#kommer använas env
+URL_DATABASE = "mysql+mysqlconnector://root:password@localhost:3306/ecommerce"
 
 
 
