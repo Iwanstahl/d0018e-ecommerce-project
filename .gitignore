@@ -1,16 +1,50 @@
-# --- Node / React ---
+# =========================
+# FRONTEND (React)
+# =========================
 frontend/node_modules/
 frontend/dist/
+frontend/build/
 frontend/.env
 npm-debug.log*
-backend/__pycache__/
-backend/venv/
-backend/config.py
 
-# --- OS / IDEs ---
+# =========================
+# BACKEND (Python / FastAPI)
+# =========================
+backend/venv/
+backend/__pycache__/
+backend/.env
+backend/*.log
+
+# Python cache
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Alembic cache
+backend/alembic/versions/__pycache__/
+
+# =========================
+# CONFIG FILES (Secrets)
+# =========================
+backend/config.py
+.env
+.env.local
+
+# =========================
+# OS FILES
+# =========================
 .DS_Store
+Thumbs.db
+
+# =========================
+# IDE FILES
+# =========================
 .vscode/
 .idea/
-Thumbs.db
-backend/config.py
-backend/config.py
+
+# =========================
+# DATABASE FILES (optional)
+# =========================
+*.db
+*.sqlite3
