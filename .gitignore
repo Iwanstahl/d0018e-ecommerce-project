@@ -27,7 +27,6 @@ backend/alembic/versions/__pycache__/
 # =========================
 # CONFIG FILES (Secrets)
 # =========================
-backend/config.py
 .env
 .env.local
 
