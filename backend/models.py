@@ -10,6 +10,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
+import decimal
 
 Base = declarative_base()
 
@@ -52,16 +53,39 @@ class Address(Base):
 # =========================
 # CART
 # =========================
+
 class Cart(Base):
     __tablename__ = "cart"
 
     cart_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
 
-    user = relationship("User", back_populates="cart")
-    items = relationship("CartItem", back_populates="cart", cascade="all, delete")
+    user_id = Column(
+        Integer,
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True   
+    )
 
+    expires_at = Column(DateTime, nullable=True)
 
+    cart_price = Column(
+        Numeric(10, 2),   
+        nullable=False,
+        default=decimal.Decimal("0.00")
+    )
+
+    # Relationships
+    user = relationship(
+        "User",
+        back_populates="cart",
+        uselist=False   
+    )
+
+    items = relationship(
+        "CartItem",
+        back_populates="cart",
+        cascade="all, delete"
+    )
 # =========================
 # CART ITEM
 # =========================
@@ -97,14 +121,39 @@ class Product(Base):
     __tablename__ = "product"
 
     product_id = Column(Integer, primary_key=True)
-    category_id = Column(Integer, ForeignKey("category.category_id", ondelete="SET NULL"))
+
+    category_id = Column(
+        Integer,
+        ForeignKey("category.category_id", ondelete="SET NULL"),
+        nullable=True
+    )
+
     name = Column(String(255), nullable=False)
-    price = Column(Numeric(10, 2), nullable=False)
-    description = Column(Text)
 
+    price = Column(
+        Numeric(10, 2),  
+        nullable=False
+    )
+
+    description = Column(Text, nullable=True)
+
+    image = Column(String(500), nullable=True)  
+
+    created_at = Column(
+        DateTime,
+        server_default=func.now(),
+        nullable=False
+    )
+
+    # Relationships
     category = relationship("Category", back_populates="products")
-    inventory = relationship("Inventory", back_populates="product", uselist=False, cascade="all, delete")
 
+    inventory = relationship(
+        "Inventory",
+        back_populates="product",
+        uselist=False,      
+        cascade="all, delete"
+    )
 
 # =========================
 # INVENTORY

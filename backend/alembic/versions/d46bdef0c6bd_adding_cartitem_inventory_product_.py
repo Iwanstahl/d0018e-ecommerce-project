@@ -1,8 +1,8 @@
-"""adding cart_item, product, inventory, category
+"""adding cartitem, inventory, product, category
 
-Revision ID: 990fd166ba0e
-Revises: d42c10aade5c
-Create Date: 2026-02-13 17:57:19.022367
+Revision ID: d46bdef0c6bd
+Revises: 3b3392653e3d
+Create Date: 2026-02-15 19:27:48.848094
 
 """
 from typing import Sequence, Union
@@ -12,11 +12,10 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '990fd166ba0e'
-down_revision: Union[str, Sequence[str], None] = 'd42c10aade5c'
+revision: str = 'd46bdef0c6bd'
+down_revision: Union[str, Sequence[str], None] = '3b3392653e3d'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
-
 
 
 def upgrade() -> None:

@@ -1,8 +1,8 @@
-"""order_item and order being added
+"""order-item
 
-Revision ID: 59b22f9ec488
-Revises: 990fd166ba0e
-Create Date: 2026-02-13 18:01:21.910061
+Revision ID: cffedd8b2941
+Revises: d46bdef0c6bd
+Create Date: 2026-02-15 19:29:12.338076
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '59b22f9ec488'
-down_revision: Union[str, Sequence[str], None] = '990fd166ba0e'
+revision: str = 'cffedd8b2941'
+down_revision: Union[str, Sequence[str], None] = 'd46bdef0c6bd'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
