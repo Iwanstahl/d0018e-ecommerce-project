@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "api": "cd .. && cd backend && venv\\Scripts\\flask  run --no-debugger"
+    "api": "cd .. && cd backend && venv\\Scripts\\uvicorn main:app --reload"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.18",
