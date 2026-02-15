@@ -19,9 +19,10 @@ def get_products(
     category_id: int | None = None,
     db: Session = Depends(get_db)
 ):
-    query = db.query(Product)
+    
+    query = db.query(Product).options(joinedload(Product.inventory))
 
-    if category_id:
+    if category_id is not None:
         query = query.filter(Product.category_id == category_id)
 
     return query.all()
