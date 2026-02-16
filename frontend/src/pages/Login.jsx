@@ -4,8 +4,46 @@ const Login = () => {
   // State to keep track if its Login or Sign Up
   const [currentState, setCurrentState] = useState('Login');
 
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleRegister = async (event) => {
+    event.preventDefault(); // Stop pageloading
+
+    if (currentState === 'Sign Up') {
+      try {
+        const response = await fetch('http://localhost:8000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password, // Backend handels the hashing
+            is_admin: false
+          }),
+        });
+
+      const data = await response.json();
+
+        if (response.ok) {
+          console.log("Success:", data);
+          alert("Account created")
+          setCurrentState('Login'); // Switch to login part
+        } else {
+          console.error("Error:", data.details);
+          alert(data.details || "ERROR")
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+      }
+    }
+  };
+
   return (
-    <form className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-(--main-text-color)'>
+    <form onSubmit={handleRegister} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-(--main-text-color)'>
       
       {/* HEADER */}
       <div className='inline-flex items-center gap-2 mb-10 mt-10'>
@@ -20,7 +58,9 @@ const Login = () => {
       {/* Only show Name input when creating account */}
       {currentState === 'Login' ? '' : (
         <input 
-          type="text" 
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className='w-full px-4 py-3 border border-(--main-text-color) bg-transparent outline-none placeholder:uppercase placeholder:text-xs placeholder:tracking-widest' 
           placeholder='Name' 
           required 
@@ -29,13 +69,17 @@ const Login = () => {
 
       <input 
         type="email" 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         className='w-full px-4 py-3 border border-(--main-text-color) bg-transparent outline-none placeholder:uppercase placeholder:text-xs placeholder:tracking-widest' 
         placeholder='Email' 
         required 
       />
       
       <input 
-        type="password" 
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         className='w-full px-4 py-3 border border-(--main-text-color) bg-transparent outline-none placeholder:uppercase placeholder:text-xs placeholder:tracking-widest' 
         placeholder='Password' 
         required 
@@ -52,12 +96,12 @@ const Login = () => {
       </div>
 
       {/* SIGN IN BUTTON */}
-      <button className='bg-(--main-text-color) text-(--second-text-color) font-bold uppercase px-10 py-3 mt-4 w-full hover:text-(--hover-color) active:scale-[0.98] transition-all'>
+      <button type='submit' className='bg-(--main-text-color) text-(--second-text-color) font-bold uppercase px-10 py-3 mt-4 w-full hover:text-(--hover-color) active:scale-[0.98] transition-all'>
         {currentState === 'Login' ? 'Sign In' : 'Create Account'}
       </button>
 
     </form>
-  )
+  );
 }
 
-export default Login
+export default Login;
