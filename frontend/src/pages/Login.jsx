@@ -47,7 +47,7 @@ const Login = () => {
         
         {currentState === 'Login' 
           ? <p onClick={() => setCurrentState('Sign Up')} className='cursor-pointer hover:text-(--hover-color) font-bold'>Create account</p>
-          : <p onClick={() => setCurrentState('Login')} className='cursor-pointer hover:text-(--hover-color) font-bold '>Login here</p>
+          : <p onClick={() => setCurrentState('Login')} className='cursor-pointer hover:text-(--hover-color) font-bold '>Login</p>
         }
       </div>
 
