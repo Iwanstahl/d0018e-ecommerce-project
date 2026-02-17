@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from decimal import Decimal
 from typing import Optional
 
-
+class InventoryResponse(BaseModel):
+    stock: int
 
 class ProductListResponse(BaseModel):
     product_id: int
@@ -14,6 +15,3 @@ class ProductListResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
-class InventoryResponse(BaseModel):
-    stock: int
