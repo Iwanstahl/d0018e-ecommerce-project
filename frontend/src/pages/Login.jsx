@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   // State to keep track if its Login or Sign Up
@@ -8,8 +9,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
+
   const handleRegister = async (event) => {
     event.preventDefault(); // Stop pageloading
+    setErrorMessage(''); // Clear previous error messages
     try {
       // REGISTER (JSON)
      if (currentState === 'Sign Up') {
@@ -30,11 +36,10 @@ const Login = () => {
 
         if (response.ok) {
           console.log("Success:", data);
-          alert("Account created")
           setCurrentState('Login'); // Switch to login part
         } else {
           console.error("Error:", data.details);
-          alert(data.details || "ERROR")
+          setErrorMessage(data.detail || "Registration failed");
         }
       
       } else {
@@ -54,14 +59,10 @@ const Login = () => {
         const data = await response.json();
 
         if (response.ok) {
-          // Save JWT-token in webbroswer
           localStorage.setItem('token', data.access_token);
-          console.log("LOGIN SUCCESSFULL, TOKEN SAVED")
-          alert("Welcome!")
-          window.location.href = '/'
+          navigate('/');
         } else {
-          console.log("INVALID CREDENTIALS")
-          alert(data.detail || "Wrond password or e-post");
+          setErrorMessage(data.detail || "Wrong password or email");
         }
       } 
     } catch (error) {
@@ -126,6 +127,12 @@ const Login = () => {
       <button type='submit' className='bg-(--main-text-color) text-(--second-text-color) font-bold uppercase px-10 py-3 mt-4 w-full hover:text-(--hover-color) active:scale-[0.98] transition-all'>
         {currentState === 'Login' ? 'Sign In' : 'Create Account'}
       </button>
+
+      {errorMessage && (
+        <p className="text-red-500 text-sm uppercase tracking-widest text-center">
+          {errorMessage}
+        </p>
+      )}
 
     </form>
   );
