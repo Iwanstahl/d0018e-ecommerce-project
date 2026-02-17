@@ -53,23 +53,30 @@ class Address(Base):
 # =========================
 # CART
 # =========================
-
 class Cart(Base):
     __tablename__ = "cart"
 
     cart_id = Column(Integer, primary_key=True)
 
+    # Logged-in user (optional)
     user_id = Column(
         Integer,
         ForeignKey("users.user_id", ondelete="CASCADE"),
-        nullable=False,
-        unique=True   
+        nullable=True,          # ✅ must be nullable now
+        unique=True
+    )
+
+    # Guest session (optional)
+    session_id = Column(
+        String(255),            # ✅ MySQL requires length
+        nullable=True,
+        unique=True             # prevents duplicate carts per session
     )
 
     expires_at = Column(DateTime, nullable=True)
 
     cart_price = Column(
-        Numeric(10, 2),   
+        Numeric(10, 2),
         nullable=False,
         default=decimal.Decimal("0.00")
     )
@@ -78,13 +85,13 @@ class Cart(Base):
     user = relationship(
         "User",
         back_populates="cart",
-        uselist=False   
+        uselist=False
     )
 
     items = relationship(
         "CartItem",
         back_populates="cart",
-        cascade="all, delete"
+        cascade="all, delete-orphan"   # 🔥 better than "delete"
     )
 # =========================
 # CART ITEM
