@@ -10,12 +10,30 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault(); // Stop pageloading
     setErrorMessage(''); // Clear previous error messages
+    setSuccessMessage(''); // Clear previous success messages
+
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Please enter a valid email address');
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+
     try {
       // REGISTER (JSON)
      if (currentState === 'Sign Up') {
@@ -36,6 +54,7 @@ const Login = () => {
 
         if (response.ok) {
           console.log("Success:", data);
+          setSuccessMessage('Account created successfully! You can now log in.');
           setCurrentState('Login'); // Switch to login part
         } else {
           console.error("Error:", data.details);
@@ -67,6 +86,8 @@ const Login = () => {
       } 
     } catch (error) {
       console.error("Network error:", error)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,7 +117,7 @@ const Login = () => {
       )}
 
       <input 
-        type="email" 
+        type="text" 
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className='w-full px-4 py-3 border border-(--main-text-color) bg-transparent outline-none placeholder:uppercase placeholder:text-xs placeholder:tracking-widest' 
@@ -123,16 +144,33 @@ const Login = () => {
         }
       </div>
 
-      {/* SIGN IN BUTTON */}
-      <button type='submit' className='bg-(--main-text-color) text-(--second-text-color) font-bold uppercase px-10 py-3 mt-4 w-full hover:text-(--hover-color) active:scale-[0.98] transition-all'>
-        {currentState === 'Login' ? 'Sign In' : 'Create Account'}
-      </button>
-
+      {/* ERROR MESSAGE */}
       {errorMessage && (
         <p className="text-red-500 text-sm uppercase tracking-widest text-center">
           {errorMessage}
         </p>
       )}
+
+      {/* SUCCESS MESSAGE */}
+      {successMessage && (
+        <p className="text-green-500 text-sm uppercase tracking-widest text-center">
+          {successMessage}
+        </p>
+      )}
+
+      {/* SIGN IN BUTTON */}
+      <button
+        type="submit"
+        disabled={loading}
+        className={`bg-(--main-text-color) text-(--second-text-color) font-bold uppercase px-10 py-3 mt-4 w-full transition-all active:scale-[0.98]
+        ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:text-(--hover-color)'}`}
+      >
+        {loading
+          ? 'Please wait...'
+          : currentState === 'Login'
+            ? 'Sign In'
+            : 'Create Account'}
+      </button>
 
     </form>
   );
