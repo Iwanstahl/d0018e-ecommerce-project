@@ -10,9 +10,9 @@ const Login = () => {
 
   const handleRegister = async (event) => {
     event.preventDefault(); // Stop pageloading
-
-    if (currentState === 'Sign Up') {
-      try {
+    try {
+      // REGISTER (JSON)
+     if (currentState === 'Sign Up') {
         const response = await fetch('http://localhost:8000/register', {
           method: 'POST',
           headers: {
@@ -36,9 +36,36 @@ const Login = () => {
           console.error("Error:", data.details);
           alert(data.details || "ERROR")
         }
-      } catch (error) {
-        console.error("Network error:", error);
-      }
+      
+      } else {
+        // LOGIN (x-www-form-urlencoded)
+        const details = new URLSearchParams();
+        details.append('username', email);
+        details.append('password', password);
+
+        const response = await fetch('http://localhost:8000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: details,
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Save JWT-token in webbroswer
+          localStorage.setItem('token', data.access_token);
+          console.log("LOGIN SUCCESSFULL, TOKEN SAVED")
+          alert("Welcome!")
+          window.location.href = '/'
+        } else {
+          console.log("INVALID CREDENTIALS")
+          alert(data.detail || "Wrond password or e-post");
+        }
+      } 
+    } catch (error) {
+      console.error("Network error:", error)
     }
   };
 

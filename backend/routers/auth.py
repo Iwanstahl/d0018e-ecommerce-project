@@ -16,6 +16,13 @@ router = APIRouter(tags=['Authentication'])
 
 @router.post("/register", response_model= UserResponse)
 def register_user(user:UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail="Email already exists."
+        )
+
 
     hashed_password = utils.hash(user.password)
 
@@ -35,7 +42,7 @@ def register_user(user:UserCreate, db: Session = Depends(get_db)):
 
 
 
-
+# FastAPI anväder OAuth2, så ingen JSON, använd x-www-form-urlencoded
 @router.post('/login', response_model= Token)
 def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 

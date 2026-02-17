@@ -6,7 +6,7 @@ import Title from '../components/Title'
 import { useEffect } from 'react'
 import ProductItem from '../components/ProductItem'
 
-const Collection = () => {
+const Products = () => {
   const { products } = useContext(ShopContext);
   const [filterProducts, setFilterProducts] = useState([]);
 
@@ -79,4 +79,4 @@ const Collection = () => {
   )
 }
 
-export default Collection
+export default Products
