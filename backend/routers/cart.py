@@ -150,7 +150,8 @@ def update_cart(
         new_item = CartItem(
             cart_id=cart.cart_id,
             product_id=cart_item.product_id,
-            quantity=cart_item.quantity
+            quantity=cart_item.quantity,
+            original_price=product.price 
         )
         db.add(new_item)
 

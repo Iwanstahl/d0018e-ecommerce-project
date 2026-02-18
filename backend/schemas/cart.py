@@ -22,6 +22,7 @@ class ProductResponseCart(BaseModel):
 
 class CartProductResponse(BaseModel):
     quantity: int
+    original_price: Decimal
     product: ProductResponseCart
 
     class Config:
