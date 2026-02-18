@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import Product, Inventory, Cart, User, CartItem
-from schemas.cart import CartItemInput, CartProductResponse
+from schemas.cart import CartItemInput, CartResponse
+from datetime import datetime, timedelta, UTC
 
 router = APIRouter(
     prefix="/cart",
@@ -12,13 +13,12 @@ router = APIRouter(
 
 
 
-@router.get("/get-cart", response_model=list[CartProductResponse])
+@router.get("/get-cart", response_model=CartResponse)
 def get_cart(
     user_id: int | None = None,
     session_id: str | None = None,
     db: Session = Depends(get_db)
 ):
-
 
     if user_id is None and session_id is None:
         raise HTTPException(
@@ -26,30 +26,28 @@ def get_cart(
             detail="Missing user_id or session_id"
         )
 
-
     if user_id is not None and session_id is not None:
         raise HTTPException(
             status_code=400,
             detail="Provide only user_id OR session_id"
         )
 
-
     if user_id is not None:
-        cart = (
-            db.query(Cart)
-            .filter(Cart.user_id == user_id)
-            .first()
-        )
+        cart = db.query(Cart).filter(
+            Cart.user_id == user_id
+        ).first()
     else:
-        cart = (
-            db.query(Cart)
-            .filter(Cart.session_id == session_id)
-            .first()
-        )
+        cart = db.query(Cart).filter(
+            Cart.session_id == session_id
+        ).first()
 
     if not cart:
-        return []
 
+        return {
+            "expires_at": None,
+            "cart_price": 0,
+            "items": []
+        }
 
     items = (
         db.query(CartItem)
@@ -58,7 +56,45 @@ def get_cart(
         .all()
     )
 
-    return items
+    return {
+        "expires_at": cart.expires_at,
+        "cart_price": cart.cart_price,
+        "items": items
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -101,13 +137,16 @@ def update_cart(
     if user_id is not None:
         cart = db.query(Cart).filter(Cart.user_id == user_id).first()
         if not cart:
-            cart = Cart(user_id=user_id)
+            cart = Cart(user_id=user_id,
+                        expires_at=datetime.now(UTC) + timedelta(minutes=5))
             db.add(cart)
             db.flush()
     else:
         cart = db.query(Cart).filter(Cart.session_id == session_id).first()
         if not cart:
-            cart = Cart(session_id=session_id)
+            cart = Cart(session_id=session_id,
+                        expires_at=datetime.now(UTC) + timedelta(minutes=5))
+
             db.add(cart)
             db.flush()
 
