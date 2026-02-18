@@ -1,9 +1,35 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import products,auth, cart
+from contextlib import asynccontextmanager
+import asyncio
 
-app = FastAPI()
+from routers import products, auth, cart
+from database import SessionLocal
+from utils import delete_expired_carts 
+
+
+
+async def cart_cleanup_scheduler():
+    while True:
+        db = SessionLocal()
+        try:
+            delete_expired_carts(db)
+        finally:
+            db.close()
+
+        await asyncio.sleep(4) 
+
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(cart_cleanup_scheduler())
+    yield
+    task.cancel()
+
+
+app = FastAPI(lifespan=lifespan)
+
 
 
 origins = ["*"]
@@ -17,15 +43,12 @@ app.add_middleware(
 )
 
 
+
 app.include_router(products.router)
 app.include_router(auth.router)
 app.include_router(cart.router)
 
 
-
-
 @app.get("/")
 async def root():
     return {"status": "API is running"}
-
-

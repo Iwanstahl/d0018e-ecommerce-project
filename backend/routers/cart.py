@@ -105,7 +105,7 @@ def update_cart(
         if not cart:
             cart = Cart(
                 user_id=user_id,
-                expires_at=datetime.now(UTC) + timedelta(minutes=5)
+                expires_at=datetime.now(UTC) + timedelta(hours=24)
             )
             db.add(cart)
             db.flush()
@@ -115,7 +115,7 @@ def update_cart(
         if not cart:
             cart = Cart(
                 session_id=session_id,
-                expires_at=datetime.now(UTC) + timedelta(minutes=5)
+                expires_at=datetime.now(UTC) + timedelta(hours=24)
             )
             db.add(cart)
             db.flush()
