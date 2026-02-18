@@ -1,39 +1,34 @@
 import React from 'react'
 import Title from '../components/Title'
 import CartItem from '../components/CartItem';
+import { useEffect, useState } from 'react';
+import { cartService } from '../../services/cartService';
 
-const mockCartResponse = {
-  cart_id: 1,
-  user_id: 1,
-  cart_price: "17249.00",
-  items: [
-    {
-      cart_item_id: 10,
-      product_id: 1,
-      quantity: 1,
-      product: {
-        product_id: 1,
-        name: "Fender Stratocaster",
-        price: "15999.00",
-        image: "https://placehold.co/600x600?text=Stratocaster",
-      }
-    },
-    {
-      cart_item_id: 11,
-      product_id: 4,
-      quantity: 2,
-      product: {
-        product_id: 4,
-        name: "Ibanez Tube Screamer TS9",
-        price: "1250.00",
-        image: "https://placehold.co/600x600?text=Tube+Screamer",
-      }
-    }
-  ]
-};
 
 const Cart = () => {
-  const cartFromApi = mockCartResponse;
+  const [cartItems, setCartItems] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
+  const fetchCart = async () => {
+    try {
+      const data = await cartService.getCart(); // Calls the service
+      setCartItems(data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  if (loading) return <div className='pt-14 text-center text-(--main-text-color)'>Loading Cart...</div>
+
+  const items = cartItems?.items || [];
+  const totalPrice = cartItems?.cart_price || 0;
 
   return (
     <div className='bordet-t pt-14'>
@@ -43,8 +38,15 @@ const Cart = () => {
       </div>
       {/* DISPLAY PRODUCTS FOR CART */}
       <div>
-        {cartFromApi.items.map((item) =>
-          <CartItem key={item.cart_item_id} cartItem={item} />
+        {items.length > 0 ? (
+          items.map((item) => ( 
+            <CartItem 
+            key={item.product.product_id} 
+            cartItem={item} 
+            refreshCart={fetchCart} />
+          ))
+        ) : (
+          <p className='text-(--main-text-color)'>Your cart is empty.</p>
         )}
       </div>
 
@@ -62,14 +64,14 @@ const Cart = () => {
           <div className='flex flex-col gap-3 text-sm'>
             <div className='flex justify-between'>
               <p className='uppercase tracking-widest text-(--main-text-color)'>Subtotal</p>
-              <p className='text-(--main-text-color)'>17 249.00 kr</p>
+              <p className='text-(--main-text-color)'>{Number(totalPrice).toLocaleString()} SEK </p>
             </div>
 
             <hr className='border-(--main-text-color)' />
 
             <div className='flex justify-between font-bold text-lg uppercase italic'>
               <p className='text-(--main-text-color)'>Total</p>
-              <p className='text-(--main-text-color)'>17 398.00 kr</p>
+              <p className='text-(--main-text-color)'>{Number(totalPrice).toLocaleString()} SEK </p>
             </div>
           </div>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 import ProductGrid from '../components/ProductGrid'
+import { cartService } from '../../services/cartService'
 
 const Product = () => {
   const { productId } = useParams();
@@ -21,6 +22,15 @@ const Product = () => {
       console.error("Error fetching product:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  const handleAddToCart = async () => {
+    try {
+      await cartService.addToCart(productData.product_id, 1); // Send productId and the amount which is always 1 in our case
+      alert(`${productData.name} has been added to cart.`) // We can change this later to something nicer
+    } catch (error) {
+      alert(error.message);
     }
   }
 
@@ -74,6 +84,7 @@ const Product = () => {
 
           <div className='flex flex-col gap-4'>
             <button 
+              onClick={handleAddToCart}
               disabled={isOutOfStock}
               className={`w-full py-4 px-10 text-sm font-bold transition-all 
                 ${isOutOfStock 
