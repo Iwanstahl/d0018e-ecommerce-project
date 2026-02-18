@@ -103,6 +103,7 @@ class CartItem(Base):
     cart_id = Column(Integer, ForeignKey("cart.cart_id", ondelete="CASCADE"))
     product_id = Column(Integer, ForeignKey("product.product_id", ondelete="CASCADE"))
     quantity = Column(Integer, nullable=False)
+    original_price = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
 
     cart = relationship("Cart", back_populates="items")

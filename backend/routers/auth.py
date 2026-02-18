@@ -17,7 +17,7 @@ router = APIRouter(tags=['Authentication'])
 @router.post("/register", response_model=UserResponse)
 def register_user(
     user: UserCreate,
-    token: int | None = None,
+    session_id: int | None = None,
     db: Session = Depends(get_db)
 ):
 
@@ -49,10 +49,10 @@ def register_user(
     db.flush()
 
 
-    if token:
+    if session_id:
 
         guest_cart = db.query(Cart).filter(
-            Cart.session_id == token
+            Cart.session_id == session_id
         ).first()
 
         if guest_cart:
@@ -71,7 +71,7 @@ def register_user(
 
 @router.post('/login', response_model=Token)
 def login(
-    token: int | None = None,
+    session_id: int | None = None,
     user_credentials: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
@@ -92,10 +92,10 @@ def login(
             detail="Invalid Credentials"
         )
 
-    if token:
+    if session_id:
 
         guest_cart = db.query(Cart).filter(
-            Cart.session_id == token
+            Cart.session_id == session_id
         ).first()
 
         if guest_cart:

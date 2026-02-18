@@ -4,6 +4,7 @@ from database import get_db
 from models import Product, Inventory, Cart, User, CartItem
 from schemas.cart import CartItemInput, CartResponse
 from datetime import datetime, timedelta, UTC
+from oauth2 import get_current_user_optional
 
 router = APIRouter(
     prefix="/cart",
@@ -13,10 +14,13 @@ router = APIRouter(
 
 @router.get("/get-cart", response_model=CartResponse)
 def get_cart(
-    user_id: int | None = None,
+    current_user: User | None = Depends(get_current_user_optional),
     session_id: str | None = None,
     db: Session = Depends(get_db)
 ):
+    
+    user_id = current_user.user_id if current_user else None
+
 
     if user_id is None and session_id is None:
         raise HTTPException(
@@ -65,11 +69,12 @@ def get_cart(
 
 @router.post("/update-cart")
 def update_cart(
-    user_id: int | None = None,
+    current_user: User | None = Depends(get_current_user_optional),
     session_id: str | None = None,
     cart_item: CartItemInput = None,
     db: Session = Depends(get_db)
 ):
+    user_id = current_user.user_id if current_user else None
 
     if user_id is None and session_id is None:
         raise HTTPException(
@@ -163,10 +168,11 @@ def update_cart(
 
 @router.delete("/delete-cart")
 def delete_cart(
-    user_id: int | None = None,
+    current_user: User | None = Depends(get_current_user_optional),
     session_id: str | None = None,
     db: Session = Depends(get_db)
 ):
+    user_id = current_user.user_id if current_user else None
 
 
     if user_id is None and session_id is None:
