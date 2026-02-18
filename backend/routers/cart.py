@@ -42,7 +42,6 @@ def get_cart(
         ).first()
 
     if not cart:
-
         return {
             "expires_at": None,
             "cart_price": 0,
@@ -66,38 +65,6 @@ def get_cart(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @router.post("/update-cart")
 def update_cart(
     user_id: int | None = None,
@@ -105,7 +72,6 @@ def update_cart(
     cart_item: CartItemInput = None,
     db: Session = Depends(get_db)
 ):
-
 
     if user_id is None and session_id is None:
         raise HTTPException(
@@ -122,8 +88,8 @@ def update_cart(
 
     product = (
         db.query(Product)
-        .filter(Product.product_id == cart_item.product_id)
         .options(joinedload(Product.inventory))
+        .filter(Product.product_id == cart_item.product_id)
         .first()
     )
 
@@ -137,16 +103,20 @@ def update_cart(
     if user_id is not None:
         cart = db.query(Cart).filter(Cart.user_id == user_id).first()
         if not cart:
-            cart = Cart(user_id=user_id,
-                        expires_at=datetime.now(UTC) + timedelta(minutes=5))
+            cart = Cart(
+                user_id=user_id,
+                expires_at=datetime.now(UTC) + timedelta(minutes=5)
+            )
             db.add(cart)
             db.flush()
+
     else:
         cart = db.query(Cart).filter(Cart.session_id == session_id).first()
         if not cart:
-            cart = Cart(session_id=session_id,
-                        expires_at=datetime.now(UTC) + timedelta(minutes=5))
-
+            cart = Cart(
+                session_id=session_id,
+                expires_at=datetime.now(UTC) + timedelta(minutes=5)
+            )
             db.add(cart)
             db.flush()
 
@@ -159,7 +129,6 @@ def update_cart(
         )
         .first()
     )
-
 
     if existing_item:
         new_quantity = existing_item.quantity + cart_item.quantity
