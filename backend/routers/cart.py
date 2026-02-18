@@ -11,8 +11,6 @@ router = APIRouter(
 )
 
 
-
-
 @router.get("/get-cart", response_model=CartResponse)
 def get_cart(
     user_id: int | None = None,

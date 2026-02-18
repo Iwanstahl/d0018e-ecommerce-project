@@ -27,7 +27,7 @@ def upgrade():
         nullable=True
     )
 
-op.add_column(
+    op.add_column(
     "cart",
     sa.Column("session_id", sa.String(255), nullable=True)
 )
