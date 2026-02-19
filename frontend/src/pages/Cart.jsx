@@ -1,13 +1,14 @@
-import React from 'react'
 import Title from '../components/Title'
 import CartItem from '../components/CartItem';
 import { useEffect, useState } from 'react';
 import { cartService } from '../../services/cartService';
+import { useNavigate } from 'react-router-dom';
 
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
 
   const fetchCart = async () => {
@@ -23,31 +24,13 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
+      await cartService.checkout();
+      navigate('/orders')
+      } catch (error) {
+        console.error("Checout error:", error.message);
+        alert(error.message);
       }
-
-      const response = await fetch('http://localhost:8000/orders/checkout', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail);
-      }
-
-      navigate('/orders');
-
-    } catch (error) {
-      console.error(error.message);
-    }
   };
-
 
   useEffect(() => {
     fetchCart();
