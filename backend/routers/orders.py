@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import Cart, CartItem, Order, OrderItem, Inventory, User
 from oauth2 import get_current_user
-from datetime import datetime
+from datetime import datetime, UTC
 
 router = APIRouter(
     prefix="/orders",
@@ -42,7 +42,7 @@ def checkout(
         raise HTTPException(status_code=400, detail="Cart is empty")
 
     total_price = sum(
-        item.quantity * item.product.price
+        item.quantity * item.original_price
         for item in cart_items
     )
 
@@ -50,7 +50,7 @@ def checkout(
         user_id=current_user.user_id,
         total_price=total_price,
         status="Completed",
-        created_at=datetime.utcnow()
+        created_at=datetime.now(UTC)
     )
 
     db.add(new_order)
@@ -76,8 +76,8 @@ def checkout(
 
         db.add(order_item)
 
-    db.query(CartItem).filter(
-        CartItem.cart_id == cart.cart_id
+    db.query(Cart).filter(
+        Cart.cart_id == current_user.user_id
     ).delete()
 
     db.commit()
