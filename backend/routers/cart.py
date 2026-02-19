@@ -160,6 +160,23 @@ def update_cart(
         )
         db.add(new_item)
 
+    db.flush()
+
+    # Recalculate cart total
+    cart_items = (
+        db.query(CartItem)
+        .options(joinedload(CartItem.product))
+        .filter(CartItem.cart_id == cart.cart_id)
+        .all()
+    )
+
+    total_price = sum(
+        item.quantity * item.product.price
+        for item in cart_items
+    )
+
+    cart.cart_price = total_price
+
     db.commit()
 
     return {"success": True}

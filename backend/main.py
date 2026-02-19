@@ -3,10 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import asyncio
 
-from routers import products, auth, cart
+from routers import products, auth, cart, orders
 from database import SessionLocal
 from utils import delete_expired_carts 
-
 
 
 async def cart_cleanup_scheduler():
@@ -30,7 +29,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-
+app.include_router(orders.router)
 
 origins = ["*"]
 

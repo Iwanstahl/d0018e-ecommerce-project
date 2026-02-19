@@ -21,6 +21,34 @@ const Cart = () => {
     }
   };
 
+  const handleCheckout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const response = await fetch('http://localhost:8000/orders/checkout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail);
+      }
+
+      navigate('/orders');
+
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+
   useEffect(() => {
     fetchCart();
   }, []);
@@ -76,7 +104,7 @@ const Cart = () => {
           </div>
 
           {/* CHECKOUT BUTTON */}
-          <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]'>
+          <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]' onClick={handleCheckout}>
             Proceed to Checkout
           </button>
 

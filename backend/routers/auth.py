@@ -67,8 +67,6 @@ def register_user(
     return new_user
 
 
-
-
 @router.post('/login', response_model=Token)
 def login(
     session_id: int | None = None,

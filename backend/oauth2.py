@@ -3,7 +3,8 @@ from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from config import settings
-import schemas, database, models
+import database, models
+from schemas.token import TokenData
 from database import get_db
 from datetime import datetime, timedelta, UTC
 
@@ -44,7 +45,7 @@ def verify_access_token(token: str, credentials_exception):
         id: int = payload.get("user_id")
         if id is None:
             raise credentials_exception
-        token_data = schemas.TokenData(id=id)
+        token_data = TokenData(id=id)
 
     except JWTError:
         raise credentials_exception

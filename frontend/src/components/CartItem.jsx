@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { cartService } from '../../services/cartService';
 
@@ -6,6 +6,8 @@ import { cartService } from '../../services/cartService';
 const CartItem = ({ cartItem, refreshCart }) => {
     const { currency } = useContext(ShopContext);
     const { product, quantity } = cartItem;
+
+    const [localQuantity, setLocalQuantity] = useState(quantity);
 
     const handleDelete = async () => {
         try {
@@ -41,7 +43,21 @@ const CartItem = ({ cartItem, refreshCart }) => {
                     className='border border-(--second-text-color) w-10 sm:w-16 px-1 sm:px-2 py-1 text-center bg-(--second-text-color) text-(--main-text-color)' 
                     type="number" 
                     min={1} 
-                    defaultValue={quantity} 
+                    value={localQuantity}
+                    onChange={async (e) => {
+                        const newQuantity = Number(e.target.value);
+                        if (newQuantity < 1) return;
+
+                        const delta = newQuantity - quantity;
+
+                        try {
+                            await cartService.addToCart(product.product_id, delta);
+                            refreshCart();
+                            setLocalQuantity(newQuantity);
+                        } catch (error) {
+                            console.error("Error updating quantity:", error.message);
+                        }
+                    }}
                 />
             </div>
             {/* Trash Icon */}
