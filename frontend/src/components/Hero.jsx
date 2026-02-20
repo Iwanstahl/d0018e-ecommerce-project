@@ -21,7 +21,7 @@ const Hero = () => {
         </h1>
 
         <div className='flex items-center gap-2 mt-2 group cursor-pointer'
-        onClick={() => navigate('/collection')}>
+        onClick={() => navigate('/products')}>
             <p className='w-10 md:w-14 h-px bg-(--second-text-color) transition-all duration-300 group-hover:bg-(--highlight-color) group-hover:w-16'></p>
             <p className='font-semibold text-sm md:text-base tracking-[0.2em] transition-colors duration-300 group-hover:text-(--highlight-color)'>
             SHOP NOW
