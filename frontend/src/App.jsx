@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Profile from './pages/Profile';
@@ -13,6 +12,7 @@ import Orders from "./pages/Orders";
 import NavBar from "./components/NavBar";
 import SearchBar from "./components/SearchBar";
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -29,6 +29,7 @@ const App = () => {
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </div>
   );
