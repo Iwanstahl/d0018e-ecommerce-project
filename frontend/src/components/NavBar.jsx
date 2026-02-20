@@ -1,12 +1,12 @@
 import React from 'react'
-import {assets} from '../assets/assets.js'
 import {Link, NavLink} from 'react-router-dom'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext.jsx'
 
 const NavBar = () => {
-
+  const isAdmin = true;
+  
   const{ showSearch, setShowSearch} = useContext(ShopContext)
 
   const navigate = useNavigate();
@@ -63,6 +63,12 @@ const NavBar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="var(--main-text-color)" strokeWidth="0.5" className="">
             <path d="M240-80q-33 0-56.5-23.5T160-160v-480q0-33 23.5-56.5T240-720h80q0-66 47-113t113-47q66 0 113 47t47 113h80q33 0 56.5 23.5T800-640v480q0 33-23.5 56.5T720-80H240Zm0-80h480v-480h-80v80q0 17-11.5 28.5T600-520q-17 0-28.5-11.5T560-560v-80H400v80q0 17-11.5 28.5T360-520q-17 0-28.5-11.5T320-560v-80h-80v480Zm160-560h160q0-33-23.5-56.5T480-800q-33 0-56.5 23.5T400-720ZM240-160v-480 480Z"/></svg>
           </Link>
+          {/* ADMIN PANEL ICON */} {/* THIS SHOULD ONLY BE SEEN BY ADMINS */}
+         { isAdmin && (
+          <Link to='/admin'>
+              <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="var(--main-text-color)"><path d="M440-520v-280h440v280H440ZM80-160v-280h400v280H80Zm0-360v-280h280v280H80Zm440-80h280v-120H520v120ZM160-240h240v-120H160v120Zm0-360h120v-120H160v120Zm360 0ZM400-360ZM280-600ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
+            </Link>
+          )}
         </div> 
     </div>
   )

@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { Link } from 'react-router-dom'
+import { productService } from '../../services/productService'
 
 const ProductItem = ({ product_id, name, price, image, category_name, stock }) => {
     const { currency } = useContext(ShopContext)
-    const imagePath = `/product_images/${image}`;
-  
+    const imagePath = productService.formatImagePath(image);
+
     return (
         <Link className='text-(--main-text-color) cursor-pointer' to={`/product/${product_id}`}>
             <div className='aspect-square overflow-hidden bg-(--second-text-color)'>
@@ -13,7 +14,6 @@ const ProductItem = ({ product_id, name, price, image, category_name, stock }) =
                     className='hover:scale-110 transition ease-in-out object-cover w-full h-full' 
                     src={imagePath} 
                     alt={name}
-                    onError={(e) => { e.target.src ='https://placehold.co/300x100/png'}} 
                 />
             </div>
             
