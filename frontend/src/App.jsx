@@ -12,7 +12,7 @@ import Orders from "./pages/Orders";
 import NavBar from "./components/NavBar";
 import SearchBar from "./components/SearchBar";
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 
 const App = () => {
   return (
@@ -29,7 +29,7 @@ const App = () => {
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />}/> 
       </Routes>
     </div>
   );
