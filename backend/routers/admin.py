@@ -109,6 +109,7 @@ def update_product(
     # Optional: Only allow admins
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
 
     product = db.query(Product).filter(
         Product.product_id == product_id
@@ -116,6 +117,7 @@ def update_product(
 
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+    
 
     # Update basic fields
     product.name = product_info.name
@@ -155,12 +157,25 @@ def update_product(
     return product
 
 
-@router.delete("/delete-product")
-def update_product(
+@router.delete("/delete-product/{product_id}")
+def delete_product(
+    product_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    pass
 
 
-    
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    product = db.query(Product).filter(
+        Product.product_id == product_id
+    ).first()
+
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    db.delete(product)
+    db.commit()
+
+    return {"success": True}

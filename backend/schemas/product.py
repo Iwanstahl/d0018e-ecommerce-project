@@ -32,12 +32,14 @@ class AddProductInput(BaseModel):
 
 
 class UpdateProductInput(BaseModel):
-    name: str | None = None
-    price: Decimal | None = None
-    image: str | None = None
-    stock: int | None = None
+    name: str 
+    price: Decimal 
+    image: str  | None = None
+    stock: int 
     category: str | None = None
     description: str | None = None
+    inventory : int | None = None
+
 
 
 class ProductResponseAdmin(BaseModel):
