@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import asyncio
 
-from routers import products, auth, cart, orders, admin
+from routers import products, auth, cart, orders, admin, rating
 from database import SessionLocal
 from utils import delete_expired_carts 
 
@@ -47,6 +47,7 @@ app.include_router(products.router)
 app.include_router(auth.router)
 app.include_router(cart.router)
 app.include_router(admin.router)
+app.include_router(rating.router)
 
 
 @app.get("/")

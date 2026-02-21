@@ -98,7 +98,6 @@ def get_products(
 
 
 
-
 @router.put("/update-product/{product_id}")
 def update_product(
     product_id: int,
