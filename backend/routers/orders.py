@@ -77,7 +77,7 @@ def checkout(
         db.add(order_item)
 
     db.query(Cart).filter(
-        Cart.cart_id == current_user.user_id
+        Cart.user_id == current_user.user_id
     ).delete()
 
     db.commit()
