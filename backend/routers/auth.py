@@ -112,7 +112,7 @@ def login(
             db.commit()
 
     access_token = oauth2.create_access_token(
-        data={"user_id": user.user_id}
+        data={"user_id": user.user_id, "is_admin" : user.is_admin}
     )
 
     return {
