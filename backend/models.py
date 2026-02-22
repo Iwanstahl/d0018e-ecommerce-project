@@ -6,7 +6,9 @@ from sqlalchemy import (
     ForeignKey,
     DateTime,
     Numeric,
-    Text
+    Text,
+    CheckConstraint,
+    UniqueConstraint
 )
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
@@ -199,3 +201,23 @@ class OrderItem(Base):
 
     order = relationship("Order", back_populates="items")
     product = relationship("Product")
+
+# =========================
+# RATING
+# =========================
+
+class Rating(Base):
+    __tablename__ = "rating"
+
+    rating_id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
+    product_id = Column(Integer, ForeignKey("product.product_id", ondelete="CASCADE"))
+    score = Column(Integer, nullable=False)
+
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "product_id", name="unique_user_product_rating"),
+        CheckConstraint("score >= 1 AND score <= 5", name="score_between_1_5"),
+    )
