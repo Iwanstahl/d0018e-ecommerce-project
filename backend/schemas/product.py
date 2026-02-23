@@ -28,30 +28,34 @@ class CategoryResponse(BaseModel):
     category_id : int
     category_name : str
 
+###################################
+
 class AddProductInput(BaseModel):
+    category: str | None = None
     name: str
     price: Decimal
-    stock: int | None = None
-    category: str
-
-    image: str | None = None
     description: str | None = None
+    image: str | None = None
+    stock: int | None = None
+
 
 
 class UpdateProductInput(BaseModel):
-    name: str | None = None
-    price: Decimal | None = None
-    image: str | None = None
-    stock: int | None = None
+    name: str 
+    price: Decimal 
+    image: str  | None = None
+    stock: int 
     category: str | None = None
     description: str | None = None
+
+
 
 
 class ProductResponseAdmin(BaseModel):
     product_id: int
     name: str
-    description: str | None = None
     price: Decimal
+    description: str | None = None
     image: str | None = None
     inventory: InventoryResponse | None = None
     category: CategoryResponse | None = None

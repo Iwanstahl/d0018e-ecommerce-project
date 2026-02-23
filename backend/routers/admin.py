@@ -55,12 +55,14 @@ def add_product(
         name=product_info.name,
         price=product_info.price,
         image=product_info.image,
-        category_id=category.category_id
+        category_id=category.category_id,
+        description = product_info.description
     )
 
     db.add(new_product)
     db.flush()
 
+        
     new_inventory = Inventory(
         stock=product_info.stock,
         product_id=new_product.product_id
@@ -70,8 +72,19 @@ def add_product(
 
     db.commit()
     db.refresh(new_product)
+    db.refresh(new_inventory)
 
-    return new_product
+    return {
+        "product_id": new_product.product_id,
+        "name": new_product.name,
+        "price": new_product.price,
+        "image": new_product.image,
+        "description": new_product.description,
+        "category_id": new_product.category_id,
+        "category": category.category_name,   
+        "stock": new_inventory.stock
+    }
+
 
 
 
@@ -105,9 +118,10 @@ def update_product(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Optional: Only allow admins
+
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
 
     product = db.query(Product).filter(
         Product.product_id == product_id
@@ -115,6 +129,7 @@ def update_product(
 
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+    
 
     # Update basic fields
     product.name = product_info.name
@@ -122,17 +137,22 @@ def update_product(
     product.image = product_info.image
     product.description = product_info.description
 
-    # Update category (create if not exists)
-    category = db.query(Category).filter(
-        Category.category_name == product_info.category
-    ).first()
 
-    if category is None:
-        category = Category(category_name=product_info.category)
-        db.add(category)
-        db.flush()
 
-    product.category_id = category.category_id
+    if product_info.category:
+        category = db.query(Category).filter(
+            Category.category_name == product_info.category
+        ).first()
+
+
+        if category is None:
+            category = Category(category_name=product_info.category)
+            db.add(category)
+            db.flush()
+
+        product.category_id = category.category_id
+    else:
+        product.category_id = None
 
     # Update inventory
     inventory = db.query(Inventory).filter(
@@ -154,12 +174,25 @@ def update_product(
     return product
 
 
-@router.delete("/delete-product")
-def update_product(
+@router.delete("/delete-product/{product_id}")
+def delete_product(
+    product_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    pass
 
 
-    
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    product = db.query(Product).filter(
+        Product.product_id == product_id
+    ).first()
+
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    db.delete(product)
+    db.commit()
+
+    return {"success": True}
