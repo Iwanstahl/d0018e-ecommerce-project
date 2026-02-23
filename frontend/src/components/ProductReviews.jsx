@@ -1,17 +1,41 @@
-import React, { useState }from 'react'
+import React, { useState, useRef, useEffect }from 'react'
 import { ratingService } from '../../services/ratingService';
 import Title from './Title';
+import ReviewComment from './ReviewComment';
 
 const ProductReviews = ({ productData, onRefresh }) => {
     const [hoverScore, setHoverScore] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedScore, setSelectedScore] = useState(0);
+    const [comments, setComments] = useState([]);
 
-    const handleRating = async (score) => {
-        try {
-            await ratingService.addRating(productData.product_id, score);
-            onRefresh();
-        } catch (error) {
-            alert("Please log in to rate products.");
+    const loadComments = async () => {
+        if (productData?.product_id) {
+            const data = await ratingService.getProductComments(productData.product_id);
+            setComments(data);
         }
+    };
+
+    const commentsRef = useRef(null);
+
+    const handleStarClick = (score) => {
+        setSelectedScore(score);
+        setIsModalOpen(true);
+    };
+
+    const handleRating = async (score, comment) => {
+        try {
+            await ratingService.addRating(productData.product_id, score, comment);
+            setIsModalOpen(false);
+            await loadComments(); 
+            onRefresh(); 
+        } catch (error) {
+            alert(error.message);
+        }
+    };  
+
+    const scrollToComments = () => {
+        commentsRef.current?.scrollIntoView({ behavior: 'smooth'});
     };
 
     //Helper func for ratings
@@ -20,6 +44,10 @@ const ProductReviews = ({ productData, onRefresh }) => {
         return `${(count / productData.rating_count) * 100}%`;
     };
 
+    useEffect(() => {
+        loadComments();
+    }, [productData.product_id])
+
 
     return (
         <div className='pt-10'>
@@ -27,8 +55,8 @@ const ProductReviews = ({ productData, onRefresh }) => {
         
         <div className='flex flex-col md:flex-row gap-12 bg-(--main-text-color) p-8 text-(--second-text-color)'>
             
-            {/* STATS: Avrage rating */}
-            <div className='flex flex-col items-center justify-center md:border-r border-white/10 md:pr-12'>
+            {/* STATS: Average rating */}
+            <div className='flex flex-col items-center justify-center md:border-r border-(--second-text-color)/10 md:pr-12'>
             <p className='text-[10px] uppercase tracking-widest opacity-50 mb-2'>Average Rating</p>
             <h3 className='text-6xl font-bold'>{productData.average_rating?.toFixed(1) || "0.0"}</h3>
             <div className='flex gap-1 my-3 text-yellow-400'>
@@ -36,7 +64,11 @@ const ProductReviews = ({ productData, onRefresh }) => {
                 <span key={i}>{i < Math.round(productData.average_rating) ? '★' : '☆'}</span>
                 ))}
             </div>
-            <p className='text-[10px] uppercase opacity-50'>{productData.rating_count} Reviews</p>
+            <p 
+                onClick={scrollToComments}
+                className='text-[10px] uppercase opacity-50'>
+                {productData.rating_count} Reviews 
+            </p>
             </div>
 
             {/* DISTRUBTION: 0-5 */}
@@ -56,7 +88,7 @@ const ProductReviews = ({ productData, onRefresh }) => {
             </div>
 
             {/* INTERACTION: VOTE */}
-            <div className='md:border-l border-white/10 md:pl-12 flex flex-col items-center justify-center'>
+            <div className='md:border-l border-(--second-text-color)/10 md:pl-12 flex flex-col items-center justify-center'>
             <p className='text-[10px] uppercase tracking-widest opacity-50 mb-4 text-center'>
                 Rate this product
             </p>
@@ -66,7 +98,7 @@ const ProductReviews = ({ productData, onRefresh }) => {
                     key={star}
                     onMouseEnter={() => setHoverScore(star)}
                     onMouseLeave={() => setHoverScore(0)}
-                    onClick={() => handleRating(star)}
+                    onClick={() => handleStarClick(star)}
                     className='text-2xl transition-transform hover:scale-125 focus:outline-none'
                 >
                     <span className={star <= (hoverScore) ? 'text-yellow-400' : 'text-white/20'}>
@@ -75,8 +107,45 @@ const ProductReviews = ({ productData, onRefresh }) => {
                 </button>
                 ))}
             </div>
-            </div>
         </div>
+    </div>
+    
+    {/* COMMENTS */}
+    <div ref={commentsRef} className='space-y-6 pt-6 border-t border-(--main-text-color)'>
+        <h4 className='text-xs font-bold uppercase tracking-widest mb-6 text-(--main-text-color)'>Customer Comments</h4>
+        
+        {comments.length > 0 ? (
+            comments.filter(r => r.comment).map((item, index) => (
+                <div 
+                key={index} 
+                className='bg-(--main-text-color) p-4 mb-2'>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <div className='flex text-yellow-400 text-[10px]'>
+                            {"★".repeat(item.score)}{"☆".repeat(5-item.score)}
+                        </div>
+                        <span className='text-[10px] font-bold uppercase text-(--second-text-color)'>
+                            {item.user?.username || "Guest User"}
+                        </span>
+                    </div>
+                    <p className='text-sm opacity-75 leading-relaxed text-(--second-text-color) '>"{item.comment}"</p>
+                    <p className='text-[9px] text-(--second-text-color) opacity-50 mt-1'>
+                        {new Date(item.created_at).toLocaleDateString()}
+                    </p>
+                </div>
+            ))
+        ) : (
+            <p className='text-xs opacity-40 text-(--main-text-color)'>No written reviews yet.</p>
+        )}
+    </div>
+
+        {/* POP-UP for writing comments */}
+        <ReviewComment 
+           isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleRating}
+            productName={productData.name}
+            initialScore={selectedScore}
+        />
     </div>
   );
 };
