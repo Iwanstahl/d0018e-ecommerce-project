@@ -196,3 +196,16 @@ def delete_product(
     db.commit()
 
     return {"success": True}
+
+
+@router.get("/get-categories")
+def get_categories(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)    
+):
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    categories = db.query(Category).all()
+
+    return categories
