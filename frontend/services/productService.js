@@ -12,7 +12,9 @@ export const productService = {
         // Format data
         return data.map(item => ({
             ...item,
-            stock: item.inventory ? item.inventory.stock : 0
+            stock: item.inventory ? item.inventory.stock : 0,
+            average_raiting: item.average_raiting || 0,
+            rating_count: item.rating_count || 0
         }));
     },
 
@@ -21,6 +23,20 @@ export const productService = {
         const response = await fetch(`${API_URL}/products/${productId}`);
         if (!response.ok) {
             throw new Error("Product not found");
+        }
+        return await response.json();
+    },
+
+    getCategories: async () => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/get-categories`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch categories");
         }
         return await response.json();
     },
@@ -42,21 +58,43 @@ export const productService = {
     },
 
     // ADMIN: add new product
-    addProduct: async () => {
+    addProduct: async (productData) => {
         const token = localStorage.getItem('token');
 
-        const response = await fetch(`${API_URL}/admin/add-products`, {
-            metod: 'POST',
+        const data = {
+            name: productData.name,
+            description: productData.description,
+            price: parseFloat(productData.price),
+            category: productData.category,
+            stock: parseInt(productData.stock),
+            image: productData.image ? productData.image.name : "default.png"
+        }
+
+        const response = await fetch(`${API_URL}/admin/add-product`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(productData)
+            body: JSON.stringify(data)
         });
         if (!response.ok) {
             const error = await response.json();
             throw new Error(error.detail || "Failed to add product");
         }
+        return await response.json();
+    },
+
+    // ADMIN: Delete product
+    deleteProduct: async (productId) => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/admin/delete-product/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) throw new Error("Could not delete product");
         return await response.json();
     },
 
@@ -66,8 +104,7 @@ export const productService = {
             return 'https://placehold.co/300x300/png';
         } else {
             return `/assets/productImages${imageName}`;
-        }
-        
+        }   
     }
 
 }

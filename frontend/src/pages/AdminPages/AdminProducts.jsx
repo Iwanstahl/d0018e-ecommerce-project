@@ -1,26 +1,54 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { productService } from '../../../services/productService'
+import AddProduct from '../../components/AddProduct'
+import { ShopContext } from '../../context/ShopContext'
 
 const AdminProducts = () => {
+  const { fetchProducts, products: shopProducts } = useContext(ShopContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const data = await productService.getAdminProducts();
+      setProducts(data);
+    } catch (error) {
+      console.error("Fetch error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const data = await productService.getAdminProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Access denied/Server error", error);
-        alert("Couldnt get data, are logged in as admin?");
-      } finally {
-        setLoading(false);
-      }
-    };
     loadData();
-  }, [])
+  }, []);
 
+  const handleAddProduct = async (formData) => {
+    try {
+      await productService.addProduct(formData);
+      alert("Product added")
+      await loadData(); // Update list
+      await fetchProducts(); //Updates shop
+      setIsModalOpen(false);
+      
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleDelete = async (productId) => {
+    if (window.confirm("Delete this product?")) {
+      try {
+        await productService.deleteProduct(productId);
+        await loadData();
+        await fetchProducts();
+      } catch (error) {
+        alert("Error deleting product:" + error.message);
+      }
+    }
+  };
 
   return (
     <div>
@@ -28,7 +56,9 @@ const AdminProducts = () => {
         <h2 className='text-2xl font-bold uppercase mb-6 text-(--main-text-color)'>
           Inventory Management
         </h2>
-        <button className='bg-(--main-text-color) text-(--second-text-color) px-4 py-2 text-xs font-bold uppercase mb-6 hover:text-(--highlight-color)'>
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className='bg-(--main-text-color) text-(--second-text-color) px-4 py-2 text-xs font-bold uppercase mb-6 hover:text-(--highlight-color)'>
           + Add New Product
         </button>
       </div>
@@ -72,7 +102,9 @@ const AdminProducts = () => {
                   <button className='text-[9px] font-bold uppercase border border-(--second-text-color) px-3 py-1 hover:bg-(--second-text-color) hover:text-(--main-text-color) transition-all'>
                     Edit
                   </button>
-                  <button className='text-[9px] font-bold uppercase bg-red-900/50 text-(--second-text-color) px-3 py-1 hover:bg-red-600 hover:text-(--second-text-color) transition-all'>
+                  <button 
+                    onClick={() => handleDelete(p.product_id)}
+                    className='text-[9px] font-bold uppercase bg-red-900/50 text-(--second-text-color) px-3 py-1 hover:bg-red-600 hover:text-(--second-text-color) transition-all'>
                     Delete
                   </button>
                 </div>
@@ -80,7 +112,14 @@ const AdminProducts = () => {
             </div>
           ))}
         </div>
+
       )}
+      <AddProduct
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSave={handleAddProduct} 
+      />
+
     </div>
   );
 };

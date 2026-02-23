@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 import ProductGrid from '../components/ProductGrid'
 import { cartService } from '../../services/cartService'
+import ProductReviews from '../components/ProductReviews'
 
 const Product = () => {
   const { productId } = useParams();
@@ -100,6 +101,9 @@ const Product = () => {
         </div>
         
       </div>
+    
+    <ProductReviews productData={productData} onRefresh={fetchProductData} />
+
     </div>
   )
 }
