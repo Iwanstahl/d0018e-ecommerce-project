@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func
 from database import get_db
-from models import Product, Rating
+from models import Product, Rating, User
 from schemas.product import ProductListResponse, InventoryResponse
 
 router = APIRouter(
@@ -97,3 +97,36 @@ def get_product(
         "rating_count": total_count,
         "ratings": rating_distribution
     }
+
+
+
+@router.get("/{product_id}/ratings")
+def get_product_ratings(
+    product_id: int,
+    db: Session = Depends(get_db)
+):
+
+    ratings = (
+        db.query(Rating, User)
+        .join(User, Rating.user_id == User.user_id)
+        .filter(Rating.product_id == product_id)
+        .order_by(Rating.created_at.desc())
+        .all()
+    )
+
+    result = []
+
+    for rating, user in ratings:
+        result.append({
+            "rating_id": rating.rating_id,
+            "score": rating.score,
+            "comment": rating.comment,
+            "created_at": rating.created_at,
+            "updated_at": rating.updated_at,
+            "user": {
+                "user_id": user.user_id,
+                "username": user.username 
+            }
+        })
+
+    return result

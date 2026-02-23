@@ -30,14 +30,20 @@ def add_rating(
     ).first()
 
     if rating is None:
+        if rating_info.score is None:
+            raise HTTPException(status_code=400, detail="Need to send score")
         rating = Rating(
             user_id=current_user.user_id,
             product_id=rating_info.product_id,
-            score= rating_info.score
+            score= rating_info.score,
+            comment = rating_info.comment
         )
         db.add(rating)
     else:
-        rating.score = rating_info.score
+        if rating_info.score is not None:
+            rating.score = rating_info.score
+        if rating_info.comment is not None:
+            rating.comment = rating_info.comment
         rating.updated_at = datetime.now(UTC)
 
     db.commit()
@@ -91,3 +97,6 @@ def get_ratings(
     ratings = query.all()
 
     return ratings
+
+
+

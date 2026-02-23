@@ -213,6 +213,7 @@ class Rating(Base):
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
     product_id = Column(Integer, ForeignKey("product.product_id", ondelete="CASCADE"))
     score = Column(Integer, nullable=False)
+    comment = Column(Text, nullable=True)
 
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
