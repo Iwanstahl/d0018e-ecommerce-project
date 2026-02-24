@@ -95,7 +95,8 @@ def get_product(
         "inventory": product.inventory.stock if product.inventory else None,
         "average_rating": float(avg_rating) if avg_rating else None,
         "rating_count": total_count,
-        "ratings": rating_distribution
+        "ratings": rating_distribution,
+        "image": product.image
     }
 
 

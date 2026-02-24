@@ -1,12 +1,35 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import User, Product, Category, Inventory
 from schemas.product import AddProductInput, UpdateProductInput, ProductResponseAdmin
 from oauth2 import get_current_user
+import shutil
+import os
 
 router = APIRouter(tags=['Admin'], prefix="/admin")
 
+@router.post("/upload-image")
+async def upload_image(image: UploadFile = File(...)):
+    try:
+        current_file_path = os.path.abspath(__file__) 
+        routers_dir = os.path.dirname(current_file_path) 
+        backend_dir = os.path.dirname(routers_dir) 
+        root_dir = os.path.dirname(backend_dir) 
+        
+        upload_dir = os.path.join(root_dir, "frontend", "public")
+        os.makedirs(upload_dir, exist_ok=True)
+        file_path = os.path.join(upload_dir, image.filename)
+        
+        print(f"Saveing file to: {file_path}")
+
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+            
+        return {"filename": image.filename}
+    except Exception as e:
+        print(f"error: {e}") 
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/add-product")
 def add_product(

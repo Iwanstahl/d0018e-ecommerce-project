@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
-import ProductGrid from '../components/ProductGrid'
 import { cartService } from '../../services/cartService'
 import ProductReviews from '../components/ProductReviews'
+import { productService } from '../../services/productService'
 
 const Product = () => {
   const { productId } = useParams();
@@ -12,12 +12,11 @@ const Product = () => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProductData = async () => {
+
+  const loadProduct = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/products/${productId}`);
-      const data = await response.json();
-    
+      const data = await productService.getProductById(productId);
       setProductData(data);
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -38,7 +37,7 @@ const Product = () => {
 
   useEffect(() => {
     if (productId) {
-        fetchProductData();
+        loadProduct();
     } window.scrollTo(0,0);
   }, [productId]);
 
@@ -47,6 +46,10 @@ const Product = () => {
 
   const isOutOfStock = !productData.inventory || productData.inventory.stock <= 0;
   console.log("Stock status for", productData.name, ":", productData.inventory?.stock);
+  console.log("DEBUG - Hela objektet:", productData);
+  console.log("DEBUG - Bildsträngen:", productData?.image);
+
+
   return (
     <div className='max-w-6xl mx-auto p-5 sm:p-10 mt-10'>
       <div className='flex flex-col sm:flex-row gap-12'>
@@ -55,7 +58,7 @@ const Product = () => {
         <div className='w-full sm:w-1/2 flex flex-col gap-4'>
           <div className='overflow-hidden bg-(--second-text-color)'>
             <img 
-              src={Array.isArray(productData.image) ? productData.image[0] : productData.image} 
+              src={productService.formatImagePath(productData.image)} 
               alt={productData.name} 
               className='w-full h-125 object-cover hover:scale-105 transition-transform duration-500'
             />
@@ -102,7 +105,7 @@ const Product = () => {
         
       </div>
     
-    <ProductReviews productData={productData} onRefresh={fetchProductData} />
+    <ProductReviews productData={productData} onRefresh={loadProduct} />
 
     </div>
   )

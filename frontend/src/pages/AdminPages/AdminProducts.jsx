@@ -25,9 +25,19 @@ const AdminProducts = () => {
     loadData();
   }, []);
 
-  const handleAddProduct = async (formData) => {
+  const handleAddProduct = async (formData, image) => {
     try {
-      await productService.addProduct(formData);
+      const imageRes = await productService.uploadImage(formData.image);
+      const image = imageRes.filename;
+
+      const finalProductData = {
+        ...formData,
+        image: image
+      };
+      
+      console.log(finalProductData)
+
+      await productService.addProduct(finalProductData);
       alert("Product added")
       await loadData(); // Update list
       await fetchProducts(); //Updates shop

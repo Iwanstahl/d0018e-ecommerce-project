@@ -1,6 +1,7 @@
 const API_URL = "http://localhost:8000";
 
 export const productService = {
+
     // Get products
     getProducts: async () => {
         const response = await fetch(`${API_URL}/products`);
@@ -12,6 +13,7 @@ export const productService = {
         // Format data
         return data.map(item => ({
             ...item,
+            image: data.image,
             stock: item.inventory ? item.inventory.stock : 0,
             average_raiting: item.average_raiting || 0,
             rating_count: item.rating_count || 0
@@ -57,6 +59,25 @@ export const productService = {
         return await response.json();
     },
 
+    uploadImage: async (file) => {
+        const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('image', file); 
+
+        const respone = await fetch(`${API_URL}/admin/upload-image`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!respone.ok) {
+            throw new Error("Couldn't upload image");
+        }
+        return await respone.json();
+    },
+
     // ADMIN: add new product
     addProduct: async (productData) => {
         const token = localStorage.getItem('token');
@@ -67,7 +88,7 @@ export const productService = {
             price: parseFloat(productData.price),
             category: productData.category,
             stock: parseInt(productData.stock),
-            image: productData.image ? productData.image.name : "default.png"
+            image: productData.image
         }
 
         const response = await fetch(`${API_URL}/admin/add-product`, {
@@ -103,7 +124,7 @@ export const productService = {
         if (!imageName) { 
             return 'https://placehold.co/300x300/png';
         } else {
-            return `/assets/productImages${imageName}`;
+            return `/${imageName}`;
         }   
     }
 
