@@ -12,6 +12,13 @@ from schemas.token import Token, TokenData
 router = APIRouter(tags=['Authentication'])
 
 
+@router.get("/check-auth")
+def check_auth(current_user: User = Depends(oauth2.get_current_user)):
+    return {
+        "authenticated": True,
+        "user": current_user
+    }
+
 
 
 @router.post("/register", response_model=UserResponse)
@@ -119,3 +126,5 @@ def login(
         "access_token": access_token,
         "token_type": "bearer"
     }
+
+
