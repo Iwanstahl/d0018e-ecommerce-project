@@ -12,7 +12,7 @@ const ProductItem = ({ product_id, name, price, image, category_name, stock }) =
             <div className='aspect-square overflow-hidden bg-(--second-text-color)'>
                 <img 
                     className='hover:scale-110 transition ease-in-out object-cover w-full h-full' 
-                    src={imagePath} 
+                    src={productService.formatImagePath(image)} 
                     alt={name}
                 />
             </div>

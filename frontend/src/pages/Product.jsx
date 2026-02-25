@@ -45,7 +45,6 @@ const Product = () => {
   if (!productData) return <div className='p-10 text-center uppercase'>Product not found.</div>
 
   const isOutOfStock = !productData.inventory || productData.inventory.stock <= 0;
-  console.log("Stock status for", productData.name, ":", productData.inventory?.stock);
   console.log("DEBUG - Hela objektet:", productData);
   console.log("DEBUG - Bildsträngen:", productData?.image);
 

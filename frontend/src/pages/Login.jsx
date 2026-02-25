@@ -26,12 +26,10 @@ const Login = () => {
       setErrorMessage('Please enter a valid email address');
       return;
     }
-
     if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters');
       return;
     }
-
     setLoading(true);
 
     try {
@@ -57,9 +55,12 @@ const Login = () => {
           setSuccessMessage('Account created successfully! You can now log in.');
           setCurrentState('Login'); // Switch to login part
         } else {
-          console.error("Error:", data.details);
-          setErrorMessage(data.detail || "Registration failed");
+          const errorMsg = Array.isArray(data.detail)
+            ? data.detail[0].msg
+            : (data.detail || "Registtration failed");
+          setErrorMessage(errorMsg);
         }
+      
       
       } else {
         // LOGIN (x-www-form-urlencoded)
@@ -81,11 +82,15 @@ const Login = () => {
           localStorage.setItem('token', data.access_token);
           navigate('/');
         } else {
-          setErrorMessage(data.detail || "Wrong password or email");
+          const errorMsg = Array.isArray(data.detail)
+            ? data.detail[0].msg
+            : (data.detail || "Wrong password or email");
+          setErrorMessage(errorMsg);
         }
       } 
     } catch (error) {
       console.error("Network error:", error)
+      setErrorMessage("Couldn't connect to server")
     } finally {
       setLoading(false);
     }

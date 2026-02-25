@@ -25,7 +25,7 @@ const AdminProducts = () => {
     loadData();
   }, []);
 
-  const handleAddProduct = async (formData, image) => {
+  const handleAddProduct = async (formData) => {
     try {
       const imageRes = await productService.uploadImage(formData.image);
       const image = imageRes.filename;

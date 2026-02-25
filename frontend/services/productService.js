@@ -13,7 +13,7 @@ export const productService = {
         // Format data
         return data.map(item => ({
             ...item,
-            image: data.image,
+            image: item.image,
             stock: item.inventory ? item.inventory.stock : 0,
             average_raiting: item.average_raiting || 0,
             rating_count: item.rating_count || 0
