@@ -60,50 +60,59 @@ const AddProduct = ({ isOpen, onClose, onSave }) => {
 
             <div className='grid grid-cols-2 gap-4'>
                 <input 
-                type="number" placeholder="PRICE (SEK)" required
-                className='border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent'
-                onChange={(e) => setFormData({...formData, price: e.target.value})}
+                    type="number" placeholder="PRICE (SEK)" required
+                    className='border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent'
+                    onChange={(e) => setFormData({...formData, price: e.target.value})}
                 />
                 <input 
-                type="number" placeholder="INITIAL STOCK" required
-                className='border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent'
-                onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                    type="number" placeholder="INITIAL STOCK" required
+                    className='border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent'
+                    onChange={(e) => setFormData({...formData, stock: e.target.value})}
                 />
             </div>
-
-            <select 
-                required
-                className='border-b border-(--main-text-color) p-2 text-sm bg-transparent outline-none'
-                onChange={(e) => setFormData({...formData, category: e.target.value})}>
-                <option value="" className='text-(--main-text-color)'>SELECT CATEGORY</option>
+            {/* CATEGORY SECTION */}
+            <div className='flex flex-col gap-1'>
+                <label className='text-[10px] uppercase font-bold mb-1 block opacity-60 text-(--main-text-color)'>
+                    Category (Select from list or type new)
+                </label>
+                <input 
+                    list="category-list"
+                    type="text"
+                    placeholder="E.G. GUITARS"
+                    required
+                    value={formData.category}
+                    className='border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent uppercase tracking-widest'
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}/>
+                <datalist id="category-list">
                     {categories.map((cat) => (
-                        <option key={cat.category_id} value={cat.category_name} className='text-black'>
+                        <option key={cat.category_id} value={cat.category_name}>
                             {cat.category_name.toUpperCase()}
                         </option>
-                    ))} 
-            </select>
+                    ))}
+                </datalist>
+            </div>
 
             <div className='mt-2'>
-                <label className='text-[10px] uppercase font-bold mb-1 block opacity-60'>Product Image</label>
+                <label className='text-[10px] uppercase font-bold mb-1 block text-(--main-text-color) opacity-60'>Product Image</label>
                 <input 
                 type="file" 
                 required
                 className='text-xs file:bg-(--main-text-color) file:text-(--second-text-color) file:border-none file:px-3 file:py-1 file:uppercase file:text-[9px] cursor-pointer'
-                onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
+                onChange={(e) => setFormData({...formData, image: e.target.files[0]})} 
                 />
             </div>
 
             <div className='flex gap-2 mt-6'>
                 <button 
                 type="submit"
-                className='flex-1 bg-(--main-text-color) text-(--second-text-color) py-3 text-xs font-bold uppercase hover:opacity-90 transition-opacity'
+                className='flex-1 bg-(--main-text-color) text-(--second-text-color) py-3 text-xs font-bold uppercase hover:text-(--hover-color)'
                 >
                 Add to Inventory
                 </button>
                 <button 
                 type="button"
                 onClick={onClose}
-                className='px-6 py-3 text-xs font-bold uppercase border border-(--main-text-color)'
+                className='px-6 py-3 text-xs text-(--second-text-color) font-bold uppercase bg-(--main-text-color) hover:text-(--hover-color)'
                 >
                 Cancel
                 </button>

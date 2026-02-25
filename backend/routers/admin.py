@@ -54,14 +54,15 @@ def add_product(
     if product_info.stock < 0:
         raise HTTPException(status_code=400, detail="Stock cannot be negative")
     
-    
+    # Normalize the input
+    category_name_input = product_info.category.strip().lower() if product_info.category else "Uncategorized"
 
     category = db.query(Category).filter(
-        Category.category_name == product_info.category
+        Category.category_name == category_name_input
     ).first()
 
     if category is None:
-        category = Category(category_name=product_info.category)
+        category = Category(category_name=category_name_input)
         db.add(category)
         db.flush()
 
