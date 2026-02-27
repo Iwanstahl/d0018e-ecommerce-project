@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import { ShopContext } from '../context/ShopContext';
+
+const token = localStorage.getItem("token");
+
+let isAdmin = false;
+
+if (token) {
+  const decoded = jwtDecode(token);
+  isAdmin = decoded.is_admin;
+}
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { user, logout } = useContext(ShopContext);
 
   const handleOrders = () => {
     navigate('/orders');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    logout();
     navigate('/');
   };
 
@@ -31,6 +43,16 @@ const Profile = () => {
         >
           My Orders
         </button>
+
+        {/* Admin Panel */}
+        {user?.is_admin && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="border border-(--main-text-color) py-4 uppercase tracking-widest hover:bg-(--main-text-color) hover:text-(--second-text-color) transition-all"
+          >
+            Admin Panel
+          </button>
+        )}
 
         {/* Sign Out */}
         <button

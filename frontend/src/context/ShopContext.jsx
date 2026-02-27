@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import { productService } from "../../services/productService";
 
 export const ShopContext = createContext();
 
-export const ShopContextProvider = (props) => {
+export const ShopContextProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showSearch, setShowSearch] = useState(false);
+    const [user, setUser] = useState(null);
 
     const currency = "SEK"
 
@@ -24,7 +26,24 @@ export const ShopContextProvider = (props) => {
 
     useEffect(() => {
         fetchProducts();
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            const decoded = jwtDecode(token);
+            setUser(decoded);
+        }
     }, []);
+
+    const login = (token) => {
+        localStorage.setItem("token", token);
+        const decoded = jwtDecode(token);
+        setUser(decoded);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+    };
   
     const contextValue = { 
         products, 
@@ -37,8 +56,8 @@ export const ShopContextProvider = (props) => {
 
 
   return (
-    <ShopContext.Provider value={contextValue}>
-      {props.children}
+    <ShopContext.Provider value={{...contextValue, user, login, logout}}>
+      {children}
     </ShopContext.Provider>
   );
 };

@@ -8,11 +8,7 @@ from schemas.token import TokenData
 from database import get_db
 from datetime import datetime, timedelta, UTC
 
-
-
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-
 
 # För endpoints som inte alltid behöver Token
 oauth2_scheme_optional = OAuth2PasswordBearer(
@@ -43,9 +39,10 @@ def verify_access_token(token: str, credentials_exception):
 
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id: int = payload.get("user_id")
+        is_admin: bool = payload.get("is_admin")
         if id is None:
             raise credentials_exception
-        token_data = TokenData(id=id)
+        token_data = TokenData(id=id, is_admin=is_admin)
 
     except JWTError:
         raise credentials_exception
@@ -93,3 +90,12 @@ def get_current_user_optional(
 
     except JWTError:
         return None
+
+
+def get_current_admin(current_user: models.User = Depends(get_current_user)):
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized as admin"
+        )
+    return current_user

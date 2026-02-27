@@ -127,4 +127,8 @@ def login(
         "token_type": "bearer"
     }
 
-
+@router.get("/admin")
+def get_users(admin: User = Depends(oauth2.get_current_admin)):
+    return {
+        "message": f"Hello, {admin.username}! You have admin access."
+    }
