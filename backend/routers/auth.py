@@ -76,7 +76,7 @@ def register_user(
 
 @router.post('/login', response_model=Token)
 def login(
-    session_id: int | None = None,
+    session_id: str | None = None,
     user_credentials: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
