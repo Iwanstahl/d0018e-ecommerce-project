@@ -2,6 +2,11 @@
 
 A three-tier e-commerce application specializing in musical instruments. This project demonstrates a robust integration between a **React** frontend, a **FastAPI** backend, and a **MySQL** relational database.
 
+* **Institution:** Luleå University of Technology (LTU)
+* **Course:** D0018E 
+* **Project:** E-Commerce Platform
+* **Academic Year:** 2026
+
 ---
 
 ## Technical Architecture
