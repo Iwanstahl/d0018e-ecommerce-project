@@ -16,7 +16,7 @@ The system is divided into three distinct layers to ensure scalability and separ
 
 ## How to Run (locally)
 
-1. ** Backend Setup **
+1. Backend Setup
 ```bash
 cd backend
 python -m venv venv
@@ -25,7 +25,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-2. ** Frontend Setup **
+2. Frontend Setup
 ```bash
 cd frontend
 npm install    
