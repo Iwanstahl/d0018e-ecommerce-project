@@ -21,7 +21,7 @@ export const authService = {
         if (!response.ok) {
             // Handle FastAPI details errors
             const errorMsg = Array.isArray(data.detail)
-                ? data.detail[0].msh
+                ? data.detail[0].msg
                 : (data.detail || "Login failed");
             throw new Error(errorMsg); 
         }

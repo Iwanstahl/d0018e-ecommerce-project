@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
+import { ShopContext } from '../context/ShopContext';
 
 const Login = () => {
+  const { login } = useContext(ShopContext);
+  const navigate = useNavigate();
+
   // State to keep track if its Login or Sign Up
   const [currentState, setCurrentState] = useState('Login');
 
@@ -15,8 +19,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  const navigate = useNavigate();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();

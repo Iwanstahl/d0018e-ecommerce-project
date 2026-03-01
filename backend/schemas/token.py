@@ -11,6 +11,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    id: Optional[int] = None
+    id: Optional[int] | None = None
+    is_admin: bool | None = None
     class Config:
         from_attributes = True

@@ -21,7 +21,7 @@ export const ratingService = {
         });
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.detai || "Couldn't save rating");
+            throw new Error(error.detail || "Couldn't save rating");
         }
         return await response.json();
     },

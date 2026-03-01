@@ -64,7 +64,7 @@ export const productService = {
         const formData = new FormData();
         formData.append('image', file); 
 
-        const respone = await fetch(`${BASE_URL}/admin/upload-image`, {
+        const response = await fetch(`${BASE_URL}/admin/upload-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -72,10 +72,10 @@ export const productService = {
             body: formData
         });
 
-        if (!respone.ok) {
+        if (!response.ok) {
             throw new Error("Couldn't upload image");
         }
-        return await respone.json();
+        return await response.json();
     },
 
     // ADMIN: add new product
