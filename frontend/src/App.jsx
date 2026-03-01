@@ -14,8 +14,14 @@ import SearchBar from "./components/SearchBar";
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashboard from "./pages/AdminPages/AdminDashboard";
 import AdminRoute from "./pages/AdminPages/AdminRoute";
+import { useEffect } from "react";
+import { getOrCreateSessionId } from "./utils/session";
 
 const App = () => {
+  useEffect(() => {
+    getOrCreateSessionId();
+  }, []);
+
   return (
     <div className="px-4 sm:px[5vw] md:px-[7vw] lg:px-[9vw]">
       <NavBar />
