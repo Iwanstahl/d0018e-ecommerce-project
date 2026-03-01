@@ -90,7 +90,14 @@ const Cart = () => {
 
           {/* CHECKOUT BUTTON */}
           <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]' 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            const token = localStorage.getItem('token');
+            if (!token){
+              navigate('/login');
+              return;
+            }
+            setIsModalOpen(true);
+          }}
           disabled={items.length===0}>
             Proceed to Checkout
           </button>

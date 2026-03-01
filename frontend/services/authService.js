@@ -8,7 +8,16 @@ export const authService = {
         details.append('username', email); // OAuth2 usually expects username key
         details.append('password', password);
 
-        const response = await fetch(`${BASE_URL}/login`, {
+        const session = localStorage.getItem('session_id');
+
+        // Build URL
+        let url = `${BASE_URL}/login`;
+
+        if (session) {
+            url += `?session_id=${session}`;
+        }
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
