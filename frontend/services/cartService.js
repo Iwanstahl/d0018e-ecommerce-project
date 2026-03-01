@@ -85,4 +85,34 @@ export const cartService = {
         }
         return await response.json();
     },
+
+    getAddresses: async (addressData) => {
+        const response = await fetch(`${BASE_URL}/addresses/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Couldn't fetch address");
+        }
+        return await response.json();
+    },
+
+    addAddress: async (addressData) => {
+        const response = await fetch(`${BASE_URL}/addresses/add-address`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(addressData)
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Couldn't save address");
+        }
+        return await response.json();
+    },
 };

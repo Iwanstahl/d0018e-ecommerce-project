@@ -14,7 +14,8 @@ class CartItemInput(BaseModel):
 class ProductResponseCart(BaseModel):
     product_id: int
     name: str
-    price: Decimal  # optional but recommended
+    price: Decimal 
+    image: Optional[str]
 
     class Config:
         from_attributes = True

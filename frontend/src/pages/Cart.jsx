@@ -1,5 +1,6 @@
 import Title from '../components/Title'
 import CartItem from '../components/CartItem';
+import AddressModal from '../components/AddressModal';
 import { useEffect, useState } from 'react';
 import { cartService } from '../../services/cartService';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const [cartItems, setCartItems] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
 
@@ -87,13 +89,20 @@ const Cart = () => {
           </div>
 
           {/* CHECKOUT BUTTON */}
-          <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]' onClick={handleCheckout}>
+          <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]' 
+          onClick={() => setIsModalOpen(true)}
+          disabled={items.length===0}>
             Proceed to Checkout
           </button>
 
         </div>
       </div>
 
+      <AddressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddressAdded={handleCheckout}
+      />
     </div>
   )
 }

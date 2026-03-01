@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import { cartService } from '../../services/cartService';
+import { productService } from '../../services/productService';
 
 
 const CartItem = ({ cartItem, refreshCart }) => {
@@ -18,6 +19,8 @@ const CartItem = ({ cartItem, refreshCart }) => {
         }
     }
 
+    console.log("Hela objektet:", cartItem);
+
     return (
         <div className='mb-3 px-4 py-5 border-full border-(--main-text-color) bg-(--main-text-color) grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>
             
@@ -25,7 +28,7 @@ const CartItem = ({ cartItem, refreshCart }) => {
                 {/* Vi hämtar bilden från den länkade produkten */}
                 <img 
                     className='w-16 sm:w-24 object-cover border border-(--second-text-color)' 
-                    src={product.image} 
+                    src={productService.formatImagePath(product.image)} 
                     alt={product.name} 
                 />
                 <div>
