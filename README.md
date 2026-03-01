@@ -43,8 +43,8 @@ cd frontend
 npm install    
 npm run dev
 ```
-### Collaborators
-* **[Isak Wanstål]**
-* **[Edwin Bohlin]**
-* **[Gegham Grigoryan ]**
+## Collaborators
+* **Isak Wanstål**
+* **Edwin Bohlin**
+* **Gegham Grigoryan**
 
