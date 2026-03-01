@@ -1,10 +1,10 @@
-const API_URL = "http://localhost:8000";
+import { BASE_URL } from './urlConfig';
 
 export const productService = {
 
     // Get products
     getProducts: async () => {
-        const response = await fetch(`${API_URL}/products`);
+        const response = await fetch(`${BASE_URL}/products`);
         if (!response.ok) {
             throw new Error("Failed to fetch products.");
         }
@@ -22,7 +22,7 @@ export const productService = {
 
     // Get specific product
     getProductById: async (productId) => {
-        const response = await fetch(`${API_URL}/products/${productId}`);
+        const response = await fetch(`${BASE_URL}/products/${productId}`);
         if (!response.ok) {
             throw new Error("Product not found");
         }
@@ -31,7 +31,7 @@ export const productService = {
 
     getCategories: async () => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_URL}/admin/get-categories`, {
+        const response = await fetch(`${BASE_URL}/admin/get-categories`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ export const productService = {
     getAdminProducts: async () => {
         const token = localStorage.getItem('token');
 
-        const response = await fetch(`${API_URL}/admin/products`, {
+        const response = await fetch(`${BASE_URL}/admin/products`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -64,7 +64,7 @@ export const productService = {
         const formData = new FormData();
         formData.append('image', file); 
 
-        const respone = await fetch(`${API_URL}/admin/upload-image`, {
+        const respone = await fetch(`${BASE_URL}/admin/upload-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -91,7 +91,7 @@ export const productService = {
             image: productData.image
         }
 
-        const response = await fetch(`${API_URL}/admin/add-product`, {
+        const response = await fetch(`${BASE_URL}/admin/add-product`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const productService = {
     // ADMIN: Delete product
     deleteProduct: async (productId) => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_URL}/admin/delete-product/${productId}`, {
+        const response = await fetch(`${BASE_URL}/admin/delete-product/${productId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

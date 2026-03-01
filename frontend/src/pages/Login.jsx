@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService';
 
 const Login = () => {
   // State to keep track if its Login or Sign Up
@@ -17,87 +18,41 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault(); // Stop pageloading
-    setErrorMessage(''); // Clear previous error messages
-    setSuccessMessage(''); // Clear previous success messages
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
 
     if (!emailRegex.test(email)) {
       setErrorMessage('Please enter a valid email address');
       return;
     }
     if (password.length < 6) {
-      setErrorMessage('Password must be at least 6 characters');
+      setErrorMessage('Password must be atleast 6 chars');
       return;
     }
     setLoading(true);
 
     try {
-      // REGISTER (JSON)
-     if (currentState === 'Sign Up') {
-        const response = await fetch('http://localhost:8000/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password, // Backend handels the hashing
-            is_admin: false
-          }),
-        });
-
-      const data = await response.json();
-
-        if (response.ok) {
-          console.log("Success:", data);
-          setSuccessMessage('Account created successfully! You can now log in.');
-          setCurrentState('Login'); // Switch to login part
-        } else {
-          const errorMsg = Array.isArray(data.detail)
-            ? data.detail[0].msg
-            : (data.detail || "Registtration failed");
-          setErrorMessage(errorMsg);
-        }
-      
-      
+      if (currentState === 'Sign Up') {
+        await authService.register(username, email, password);
+        setSuccessMessage('Account created successfully!');
+        setCurrentState('Login');
       } else {
-        // LOGIN (x-www-form-urlencoded)
-        const details = new URLSearchParams();
-        details.append('username', email);
-        details.append('password', password);
-
-        const response = await fetch('http://localhost:8000/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: details,
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          localStorage.setItem('token', data.access_token);
-          navigate('/');
-        } else {
-          const errorMsg = Array.isArray(data.detail)
-            ? data.detail[0].msg
-            : (data.detail || "Wrong password or email");
-          setErrorMessage(errorMsg);
-        }
-      } 
+        // Logic for login
+        const data = await authService.login(email, password);
+        localStorage.setItem('token', data.access_token);
+        navigate('/');
+      }
     } catch (error) {
-      console.error("Network error:", error)
-      setErrorMessage("Couldn't connect to server")
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleRegister} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-(--main-text-color)'>
+    <form onSubmit={handleFormSubmit} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-(--main-text-color)'>
       
       {/* HEADER */}
       <div className='inline-flex items-center gap-2 mb-10 mt-10'>

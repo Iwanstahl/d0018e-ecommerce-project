@@ -1,5 +1,5 @@
-const BASE_URL = 'http://localhost:8000';
-const CART_URL = `${BASE_URL}/cart`
+import { BASE_URL } from './urlConfig';
+const CART_URL = `${BASE_URL}/cart`;
 
 export const cartService = {
 

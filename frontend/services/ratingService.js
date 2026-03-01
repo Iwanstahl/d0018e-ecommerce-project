@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+import { BASE_URL } from './urlConfig';
 
 const getHeaders = () => ({
     'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export const ratingService = {
     addRating: async (ProductId, score, comment = null) => {
         const CleanComment = comment && comment.trim() !== "" ? comment : null;
 
-        const response = await fetch(`${API_URL}/rating/add-rating`, {
+        const response = await fetch(`${BASE_URL}/rating/add-rating`, {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify({ 
@@ -27,7 +27,7 @@ export const ratingService = {
     },
 
     getProductComments: async (productId) => {
-        const response = await fetch(`${API_URL}/products/${productId}/ratings`);
+        const response = await fetch(`${BASE_URL}/products/${productId}/ratings`);
         if (!response.ok) {
             return []; //Empty list if anything goes wrong
         }

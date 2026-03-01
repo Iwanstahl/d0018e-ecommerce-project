@@ -4,7 +4,7 @@ import AddProduct from '../../components/AddProduct'
 import { ShopContext } from '../../context/ShopContext'
 
 const AdminProducts = () => {
-  const { fetchProducts, products: shopProducts } = useContext(ShopContext);
+  const { fetchProducts } = useContext(ShopContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
