@@ -23,7 +23,6 @@ The system is divided into three distinct layers to ensure scalability and separ
 
 ### Database
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
----
 
 ## How to Run (locally)
 
