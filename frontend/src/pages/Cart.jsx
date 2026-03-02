@@ -1,17 +1,15 @@
-import Title from '../components/Title'
-import CartItem from '../components/CartItem';
-import AddressModal from '../components/AddressModal';
-import { useEffect, useState } from 'react';
-import { cartService } from '../../services/cartService';
-import { useNavigate } from 'react-router-dom';
-
+import Title from "../components/Title";
+import CartItem from "../components/CartItem";
+import AddressModal from "../components/AddressModal";
+import { useEffect, useState } from "react";
+import { cartService } from "../../services/cartService";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-
 
   const fetchCart = async () => {
     try {
@@ -27,81 +25,95 @@ const Cart = () => {
   const handleCheckout = async () => {
     try {
       await cartService.checkout();
-      navigate('/orders')
-      } catch (error) {
-        console.error("Checout error:", error.message);
-        alert(error.message);
-      }
+      navigate("/orders");
+    } catch (error) {
+      console.error("Checout error:", error.message);
+      alert(error.message);
+    }
   };
 
   useEffect(() => {
     fetchCart();
   }, []);
 
-  if (loading) return <div className='pt-14 text-center text-(--main-text-color)'>Loading Cart...</div>
+  if (loading)
+    return (
+      <div className="pt-14 text-center text-(--main-text-color)">
+        Loading Cart...
+      </div>
+    );
 
   const items = cartItems?.items || [];
   const totalPrice = cartItems?.cart_price || 0;
 
   return (
-    <div className='bordet-t pt-14'>
+    <div className="bordet-t pt-14">
       {/* TITLE */}
-      <div className='text-2xl mb-3'>
-        <Title text1='YOUR' text2='CART' />
+      <div className="text-2xl mb-3">
+        <Title text1="YOUR" text2="CART" />
       </div>
       {/* DISPLAY PRODUCTS FOR CART */}
       <div>
         {items.length > 0 ? (
-          items.map((item) => ( 
-            <CartItem 
-            key={item.product.product_id} 
-            cartItem={item} 
-            refreshCart={fetchCart} />
+          items.map((item) => (
+            <CartItem
+              key={item.product.product_id}
+              cartItem={item}
+              refreshCart={fetchCart}
+            />
           ))
         ) : (
-          <p className='text-(--main-text-color)'>Your cart is empty.</p>
+          <p className="text-(--main-text-color)">Your cart is empty.</p>
         )}
       </div>
 
       {/* CHECKOUT SECTION */}
-      <div className='flex justify-end my-20'>
-        <div className='w-full sm:w-112.5 flex flex-col gap-6'>
-          
+      <div className="flex justify-end my-20">
+        <div className="w-full sm:w-112.5 flex flex-col gap-6">
           {/* HEADER */}
-          <div className='flex items-center gap-2'>
-            <h2 className='text-2xl font-medium uppercase text-(--main-text-color)'>Cart <span className='text-(--highlight-color)'>Totals</span></h2>
-            <div className='h-px flex-1 bg-(--main-text-color)'></div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-2xl font-medium uppercase text-(--main-text-color)">
+              Cart <span className="text-(--highlight-color)">Totals</span>
+            </h2>
+            <div className="h-px flex-1 bg-(--main-text-color)"></div>
           </div>
 
           {/* PRICE DETAILS */}
-          <div className='flex flex-col gap-3 text-sm'>
-            <div className='flex justify-between'>
-              <p className='uppercase tracking-widest text-(--main-text-color)'>Subtotal</p>
-              <p className='text-(--main-text-color)'>{Number(totalPrice).toLocaleString()} SEK </p>
+          <div className="flex flex-col gap-3 text-sm">
+            <div className="flex justify-between">
+              <p className="uppercase tracking-widest text-(--main-text-color)">
+                Subtotal
+              </p>
+              <p className="text-(--main-text-color)">
+                {Number(totalPrice).toLocaleString()} SEK{" "}
+              </p>
             </div>
 
-            <hr className='border-(--main-text-color)' />
+            <hr className="border-(--main-text-color)" />
 
-            <div className='flex justify-between font-bold text-lg uppercase italic'>
-              <p className='text-(--main-text-color)'>Total</p>
-              <p className='text-(--main-text-color)'>{Number(totalPrice).toLocaleString()} SEK </p>
+            <div className="flex justify-between font-bold text-lg uppercase italic">
+              <p className="text-(--main-text-color)">Total</p>
+              <p className="text-(--main-text-color)">
+                {Number(totalPrice).toLocaleString()} SEK{" "}
+              </p>
             </div>
           </div>
 
           {/* CHECKOUT BUTTON */}
-          <button className='w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]' 
-          onClick={() => {
-            const token = localStorage.getItem('token');
-            if (!token){
-              navigate('/login');
-              return;
-            }
-            setIsModalOpen(true);
-          }}
-          disabled={items.length===0}>
+          <button
+            className="w-full bg-(--main-text-color) text-(--second-text-color) py-4 font-bold uppercase tracking-widest hover:text-(--hover-color) transition-all active:scale-[0.98]"
+            onClick={() => {
+              const token = localStorage.getItem("token");
+              if (!token) {
+                navigate("/login");
+                return;
+              }
+              setIsModalOpen(true);
+            }}
+            disabled={items.length === 0}
+          >
             Proceed to Checkout
           </button>
-
         </div>
       </div>
 
@@ -111,7 +123,7 @@ const Cart = () => {
         onAddressAdded={handleCheckout}
       />
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
