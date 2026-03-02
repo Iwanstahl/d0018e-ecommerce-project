@@ -74,15 +74,15 @@ const Products = () => {
       <div className="flex-1">
         <div className="flex justify-between text-base sm:text-2x1 mb-4">
           <Title text1={"OUR"} text2={"PRODUCTS"} />
-          {/* Product Sort */}
-          <select className="border-2 border-(--main-text-color) bg-(--main-text-color) text-sm text-(--second-text-color) px-2">
+          {/* Product Sort  REMOVED BEACUSE IT HAS NO LOGIC */}
+{ /*           <select className="border-2 border-(--main-text-color) bg-(--main-text-color) text-sm text-(--second-text-color) px-2">
             <option value="low-high" className="text-(--second-text-color)">
               Sort-by: Low to High
             </option>
             <option value="high-low" className="text-(--second-text-color">
               Sort-by: High to Low
             </option>
-          </select>
+          </select> */}
         </div>
 
         {/* MAP PRODUCTS */}
