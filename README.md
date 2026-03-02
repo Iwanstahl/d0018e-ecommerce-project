@@ -43,13 +43,9 @@ npm install
 npm run dev
 ```
 ## Collaborators
-* **Isak Wanstål**
-* **Edwin Bohlin**
-* **Gegham Grigoryan**
-
 | Name | GitHub |
 | :--- | :--- |
 | **Isak Wanstål** |  [@Iwanstahl](https://github.com/Iwanstahl) |
-| **Edwin Bohlin** | [@weraf][(https://github.com/weraf)] |
+| **Edwin Bohlin** | [@weraf](https://github.com/weraf) |
 | **Gegham Grigoryan** | [@Geram-dot](https://github.com/Geram-dot) |
 
