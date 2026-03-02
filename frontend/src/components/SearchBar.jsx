@@ -1,20 +1,24 @@
 import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const { showSearch, setShowSearch, searchQuery, setSearchQuery } =
     useContext(ShopContext);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!location.pathname.includes("products")) {
       setShowSearch(false);
+      setSearchQuery("");
     }
   }, [location]);
 
   if (!showSearch || !location.pathname.includes("products")) return null;
+
 
   return (
     <div className="text-center">
@@ -30,7 +34,10 @@ const SearchBar = () => {
       </div>
 
       <svg
-        onClick={() => setShowSearch(false)}
+        onClick={() => {
+          setShowSearch(false);
+          setSearchQuery("");
+        }}
         className="inline w-3 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         height="24px"

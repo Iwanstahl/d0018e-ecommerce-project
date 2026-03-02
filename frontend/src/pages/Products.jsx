@@ -18,7 +18,8 @@ const Products = () => {
     // Search filter
     if (searchQuery) {
       filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category_name?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -33,8 +34,6 @@ const Products = () => {
 
   }, [products, searchQuery, selectedCategories]);
 
-
-
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-8">
       {/* Left side */}
@@ -48,7 +47,6 @@ const Products = () => {
           <div className="flex flex-col gap-2 text-sm font-light text-(--second-text-color)">
           {categories.map(category => (
             <label key={category} className="flex items-center gap-2 cursor-pointer">
-
               <input
                 type="checkbox"
                 className="accent-white"
@@ -63,9 +61,7 @@ const Products = () => {
                   }
                 }}
               />
-
-              {category}
-
+              {category.toUpperCase()}
             </label>
           ))}
 
