@@ -22,7 +22,10 @@ def get_products(
     query = (
         db.query(Product, avg_rating, rating_count)
         .outerjoin(Rating, Rating.product_id == Product.product_id)
-        .options(joinedload(Product.inventory))
+        .options(
+            joinedload(Product.inventory),
+            joinedload(Product.category)
+        )
         .group_by(Product.product_id)
     )
 
@@ -36,7 +39,12 @@ def get_products(
     for product, average_rating, rating_count in rows:
         results.append(
             ProductListResponse(
-                **product.__dict__, 
+                product_id=product.product_id,
+                name=product.name,
+                price=product.price,
+                image=product.image,
+                inventory=product.inventory,
+                category_name=product.category.category_name if product.category else None,
                 average_rating=float(average_rating) if average_rating is not None else None,
                 rating_count=int(rating_count),
             )
@@ -55,7 +63,10 @@ def get_product(
 
     product = (
         db.query(Product)
-        .options(joinedload(Product.inventory))
+        .options(
+            joinedload(Product.inventory),
+            joinedload(Product.category)
+        )
         .filter(Product.product_id == product_id)
         .first()
     )
@@ -93,6 +104,7 @@ def get_product(
         "price": product.price,
         "description" : product.description,
         "inventory": product.inventory.stock if product.inventory else None,
+        "category_name": product.category.category_name if product.category else None,
         "average_rating": float(avg_rating) if avg_rating else None,
         "rating_count": total_count,
         "ratings": rating_distribution,

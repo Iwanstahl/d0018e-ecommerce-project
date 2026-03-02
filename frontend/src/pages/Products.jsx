@@ -41,25 +41,38 @@ const Products = () => {
       {/* Filter Options */}
       <div className="min-w-60">
         {/* CATEGORY FILTER, THE BOX AROUND CATEGORIES */}
-        {categories.map(category => (
-          <p key={category} className="flex gap-2 text-(--second-text-color)">
-            <input
-              type="checkbox"
-              value={category}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setSelectedCategories(prev => [...prev, category]);
-                } else {
-                  setSelectedCategories(prev =>
-                    prev.filter(c => c !== category)
-                  );
-                }
-              }}
-            />
-            {category}
+        <div className="hidden sm:block border border-(--main-text-color) bg-(--main-text-color) pl-5 py-4 mt-6">
+          <p className="mb-3 text-sm font-medium text-(--second-text-color)">
+            CATEGORIES
           </p>
-        ))}
+          <div className="flex flex-col gap-2 text-sm font-light text-(--second-text-color)">
+          {categories.map(category => (
+            <label key={category} className="flex items-center gap-2 cursor-pointer">
+
+              <input
+                type="checkbox"
+                className="accent-white"
+                checked={selectedCategories.includes(category)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedCategories(prev => [...prev, category]);
+                  } else {
+                    setSelectedCategories(prev =>
+                      prev.filter(c => c !== category)
+                    );
+                  }
+                }}
+              />
+
+              {category}
+
+            </label>
+          ))}
+
+          </div>
+        </div>
       </div>
+
 
       {/* Right side */}
       <div className="flex-1">

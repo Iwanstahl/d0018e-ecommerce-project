@@ -16,6 +16,7 @@ class ProductListResponse(BaseModel):
     price: Decimal
     image : str | None
     inventory: InventoryResponse | None
+    category_name: str | None
     average_rating : float | None
     rating_count: int
 
@@ -39,7 +40,6 @@ class AddProductInput(BaseModel):
     stock: int | None = None
 
 
-
 class UpdateProductInput(BaseModel):
     name: str 
     price: Decimal 
@@ -47,8 +47,6 @@ class UpdateProductInput(BaseModel):
     stock: int 
     category: str | None = None
     description: str | None = None
-
-
 
 
 class ProductResponseAdmin(BaseModel):
