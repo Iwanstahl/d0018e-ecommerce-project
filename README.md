@@ -42,9 +42,9 @@ npm install
 npm run dev
 ```
 ## Collaborators
-| Name | GitHub |
-| :--- | :--- |
-| **Isak Wanstål** |  [@Iwanstahl](https://github.com/Iwanstahl) |
-| **Edwin Bohlin** | [@weraf](https://github.com/weraf) |
-| **Gegham Grigoryan** | [@Geram-dot](https://github.com/Geram-dot) |
+| Name | GitHub | School |
+| :--- | :--- | :--- |
+| **Isak Wanstål** |  [@Iwanstahl](https://github.com/Iwanstahl) | isawan-3@student.ltu.se |
+| **Edwin Bohlin** | [@weraf](https://github.com/weraf) | edwboh-3@student.ltu.se |
+| **Gegham Grigoryan** | [@Geram-dot](https://github.com/Geram-dot) | geggri-2@student.ltu.se |
 
