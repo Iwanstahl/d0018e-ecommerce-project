@@ -42,7 +42,7 @@ npm install
 npm run dev
 ```
 ## Collaborators
-| Name | GitHub | School |
+| Name | GitHub | School Email |
 | :--- | :--- | :--- |
 | **Isak Wanstål** |  [@Iwanstahl](https://github.com/Iwanstahl) | isawan-3@student.ltu.se |
 | **Edwin Bohlin** | [@weraf](https://github.com/weraf) | edwboh-3@student.ltu.se |
