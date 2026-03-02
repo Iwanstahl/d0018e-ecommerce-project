@@ -4,6 +4,9 @@
 frontend/node_modules/
 frontend/dist/
 frontend/build/
+frontend/public/*.jpg
+frontend/public/*.jpeg
+frontend/public/*.png
 frontend/.env
 npm-debug.log*
 
