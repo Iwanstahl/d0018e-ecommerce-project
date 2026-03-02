@@ -21,7 +21,7 @@ const AddProduct = ({ isOpen, onClose, onSave, initialData }) => {
                 price: initialData.price || '',
                 category: initialData.category?.category_name || '',
                 stock: initialData.inventory?.stock || 0,
-                image: initialData.image // Här sparar vi namnet på den existerande bilden
+                image: initialData.image 
             });
         } else if (isOpen) {
             // Reset if opening new product
@@ -116,7 +116,7 @@ const AddProduct = ({ isOpen, onClose, onSave, initialData }) => {
                         </label>
                         <input 
                             type="file" 
-                            required={!initialData} // Krävs bara vid ny produkt
+                            required={!initialData} 
                             className='text-xs file:bg-(--main-text-color) file:text-(--second-text-color) file:border-none file:px-3 file:py-1 cursor-pointer'
                             onChange={(e) => setFormData({...formData, image: e.target.files[0]})} 
                         />
