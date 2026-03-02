@@ -4,7 +4,7 @@
 * **Project:** E-Commerce Platform
 * **Academic Year:** 2025/2026
 
-The purpose of this project was to create a e-commerce website using a relational SQL database. The project was split up in three sprints each rougly 2 weeks long, with an additional fourth sprint incase something was missing. 
+The purpose of this project was to create a e-commerce website using a relational SQL database. The project was split up in three sprints each roughly 2 weeks long, with an additional fourth sprint incase something was missing. 
 
 ---
 
