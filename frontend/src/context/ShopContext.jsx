@@ -9,6 +9,7 @@ export const ShopContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [showSearch, setShowSearch] = useState(false);
     const [user, setUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const currency = "SEK"
 
@@ -50,6 +51,8 @@ export const ShopContextProvider = ({ children }) => {
         loading, 
         currency, 
         showSearch, 
+        searchQuery,
+        setSearchQuery,
         setShowSearch,
         fetchProducts
     };

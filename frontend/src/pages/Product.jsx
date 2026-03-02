@@ -82,6 +82,10 @@ const Product = () => {
             {productData.price} {currency}
           </p>
 
+          <p className="text-sm uppercase opacity-60 mb-4">
+            Category: {productData.category_name}
+          </p>
+
           <hr className="border-(--main-text-color) mb-6" />
 
           <h3 className="text-sm font-bold uppercase mb-2">Desciption</h3>

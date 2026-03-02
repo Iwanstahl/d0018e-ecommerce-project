@@ -7,12 +7,33 @@ import { useEffect } from "react";
 import ProductItem from "../components/ProductItem";
 
 const Products = () => {
-  const { products } = useContext(ShopContext);
+  const { products, searchQuery} = useContext(ShopContext);
   const [filterProducts, setFilterProducts] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const categories = [...new Set(products.map(p => p.category_name))];
 
   useEffect(() => {
-    setFilterProducts(products);
-  }, [products]);
+    let filtered = products;
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Category filter
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedCategories.includes(product.category_name)
+      );
+    }
+
+    setFilterProducts(filtered);
+
+  }, [products, searchQuery, selectedCategories]);
+
+
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-8">
@@ -20,26 +41,24 @@ const Products = () => {
       {/* Filter Options */}
       <div className="min-w-60">
         {/* CATEGORY FILTER, THE BOX AROUND CATEGORIES */}
-        <div className="hidden sm:block border border-(--main-text-color) bg-(--main-text-color) pl-5 py-3 mt-6">
-          <p className="mb-3 text-sm font-medium text-(--second-text-color)">
-            CATEGORIES
+        {categories.map(category => (
+          <p key={category} className="flex gap-2 text-(--second-text-color)">
+            <input
+              type="checkbox"
+              value={category}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedCategories(prev => [...prev, category]);
+                } else {
+                  setSelectedCategories(prev =>
+                    prev.filter(c => c !== category)
+                  );
+                }
+              }}
+            />
+            {category}
           </p>
-          <div className="flex flex-col gap-2 text-sm font-light text-(second-text-color)">
-            {/* CATEGORY OPTIONS */}
-            <p className="flex gap-2 text-(--second-text-color)">
-              <input type="checkbox" value={"guitars"} /> Guitars
-            </p>
-            <p className="flex gap-2 text-(--second-text-color)">
-              <input type="checkbox" value={"amplifiers"} /> Amplifiers
-            </p>
-            <p className="flex gap-2 text-(--second-text-color)">
-              <input type="checkbox" value={"effects"} /> Effects
-            </p>
-            <p className="flex gap-2 text-(--second-text-color)">
-              <input type="checkbox" value={"accessories"} /> Accessories
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Right side */}
