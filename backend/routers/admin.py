@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session, joinedload
 from database import get_db
-from models import User, Product, Category, Inventory
+from models import User, Product, Category, Inventory, Order, OrderItem
 from schemas.product import AddProductInput, UpdateProductInput, ProductResponseAdmin
+from schemas.order import AdminOrderResponse
 from oauth2 import get_current_user
 import shutil
 import os
@@ -233,3 +234,24 @@ def get_categories(
     categories = db.query(Category).all()
 
     return categories
+
+
+@router.get("/orders", response_model=list[AdminOrderResponse])
+def get_all_orders(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    orders = (
+        db.query(Order)
+        .options(
+            joinedload(Order.user),
+            joinedload(Order.items).joinedload(OrderItem.product)
+        )
+        .order_by(Order.created_at.desc())
+        .all()
+    )
+
+    return orders
