@@ -120,8 +120,8 @@ const AddProduct = ({ isOpen, onClose, onSave, initialData }) => {
                             className='text-xs file:bg-(--main-text-color) file:text-(--second-text-color) file:border-none file:px-3 file:py-1 cursor-pointer'
                             onChange={(e) => setFormData({...formData, image: e.target.files[0]})} 
                         />
-                        {initialData && !formData.image instanceof File && (
-                            <p className='text-[9px] opacity-50 mt-1 uppercase italic'>Current: {formData.image}</p>
+                        {initialData && !(formData.image instanceof File) && (
+                            <p className='text-[9px] opacity-50 mt-1 uppercase '>Current: {formData.image}</p>
                         )}
                     </div>
 
