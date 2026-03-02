@@ -1,11 +1,10 @@
 # E-Commerce Project - D0018E
-
-A three-tier e-commerce application specializing in musical instruments. This project demonstrates a robust integration between a **React** frontend, a **FastAPI** backend, and a **MySQL** relational database.
-
 * **Institution:** Luleå University of Technology (LTU)
 * **Course:** D0018E 
 * **Project:** E-Commerce Platform
 * **Academic Year:** 2026
+
+The purpose of this project was to create a e-commerce website using a relational SQL database. The project was split up in three sprints each rougly 2 weeks long, with an additional fourth sprint incase something was missing. 
 
 ---
 
@@ -47,4 +46,10 @@ npm run dev
 * **Isak Wanstål**
 * **Edwin Bohlin**
 * **Gegham Grigoryan**
+
+| Name | GitHub |
+| :--- | :--- |
+| **Isak Wanstål** |  [@Iwanstahl](https://github.com/Iwanstahl) |
+| **Edwin Bohlin** | [@weraf][(https://github.com/weraf)] |
+| **Gegham Grigoryan** | [@Geram-dot](https://github.com/Geram-dot) |
 
