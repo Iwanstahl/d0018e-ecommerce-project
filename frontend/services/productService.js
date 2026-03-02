@@ -59,6 +59,20 @@ export const productService = {
         return await response.json();
     },
 
+    getAdminOrders: async () => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${BASE_URL}/admin/orders`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Couln't fetch orders")
+        }
+        return await response.json();
+    },
+
     uploadImage: async (file) => {
         const token = localStorage.getItem('token');
         const formData = new FormData();
@@ -144,6 +158,8 @@ export const productService = {
         } else {
             return `/${imageName}`;
         }   
-    }
+    },
+
+
 
 }
