@@ -9,6 +9,8 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [editingProduct, setEditingProduct] = useState(null);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -27,24 +29,35 @@ const AdminProducts = () => {
 
   const handleAddProduct = async (formData) => {
     try {
-      const imageRes = await productService.uploadImage(formData.image);
-      const image = imageRes.filename;
+      let finalImage = formData.image;
+
+      if (formData.image instanceof File) {
+        const imageRes = await productService.uploadImage(formData.image);
+        finalImage = imageRes.filename;
+      }
 
       const finalProductData = {
         ...formData,
-        image: image
+        image: finalImage
       };
-      
-      console.log(finalProductData)
 
-      await productService.addProduct(finalProductData);
-      alert("Product added")
-      await loadData(); // Update list
-      await fetchProducts(); //Updates shop
+      if (editingProduct) {
+        // UPDATE LOGIC 
+        await productService.updateProduct(editingProduct.product_id, finalProductData);
+        alert("Product updated successfully");
+      } else {
+        // ADD LOGIC 
+        await productService.addProduct(finalProductData);
+        alert("Product added successfully");
+      }
+      
+      await loadData(); 
+      await fetchProducts(); 
       setIsModalOpen(false);
+      setEditingProduct(null);
       
     } catch (error) {
-      alert(error.message);
+      alert("Error: " + error.message);
     }
   };
 
@@ -67,7 +80,7 @@ const AdminProducts = () => {
           Inventory Management
         </h2>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => { setEditingProduct(null); setIsModalOpen(true); }}
           className='bg-(--main-text-color) text-(--second-text-color) px-4 py-2 text-xs font-bold uppercase mb-6 hover:text-(--highlight-color)'>
           + Add New Product
         </button>
@@ -85,9 +98,9 @@ const AdminProducts = () => {
               key={p.product_id} 
               className='bg-(--main-text-color) text-(--second-text-color) p-4 flex items-center justify-between border border-(--second-text-color) shadow-lg'
             >
-              {/* Vänster sida: Bild och Info */}
+              {/* Left side: Picture + info */}
               <div className='flex items-center gap-6'>
-                <div className='w-16 h-16 bg-white/10 flex items-center justify-center overflow-hidden'>
+                <div className='w-16 h-16 bg-(--second-text-color)/10 flex items-center justify-center overflow-hidden'>
                    <img 
                     src={productService.formatImagePath(p.image)} 
                     alt={p.name} 
@@ -109,7 +122,9 @@ const AdminProducts = () => {
                 </div>
                 
                 <div className='flex flex-col gap-1'>
-                  <button className='text-[9px] font-bold uppercase border border-(--second-text-color) px-3 py-1 hover:bg-(--second-text-color) hover:text-(--main-text-color) transition-all'>
+                  <button 
+                    onClick={() => { setEditingProduct(p); setIsModalOpen(true); }}
+                    className='text-[9px] font-bold uppercase border border-(--second-text-color) px-3 py-1 hover:bg-(--second-text-color) hover:text-(--main-text-color) transition-all'>
                     Edit
                   </button>
                   <button 
@@ -126,8 +141,9 @@ const AdminProducts = () => {
       )}
       <AddProduct
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={() => { setIsModalOpen(false); setEditingProduct(null); }} 
         onSave={handleAddProduct} 
+        initialData={editingProduct}
       />
 
     </div>

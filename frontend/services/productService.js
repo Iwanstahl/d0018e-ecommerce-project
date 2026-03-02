@@ -119,6 +119,24 @@ export const productService = {
         return await response.json();
     },
 
+    updateProduct: async (productId, productData) => {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${BASE_URL}/admin/update-product/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(productData),
+      }); 
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to update product");
+      }
+      return await response.json();
+    },
+
     // Image handeling 
     formatImagePath: (imageName) => {
         if (!imageName) { 
