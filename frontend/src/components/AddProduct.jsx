@@ -106,6 +106,7 @@ const AddProduct = ({ isOpen, onClose, onSave, initialData }) => {
               type="number"
               placeholder="STOCK"
               required
+              min="0"
               value={formData.stock}
               className="border-b border-(--main-text-color) p-2 text-sm outline-none bg-transparent"
               onChange={(e) =>
