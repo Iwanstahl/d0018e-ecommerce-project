@@ -64,13 +64,13 @@ class Cart(Base):
     user_id = Column(
         Integer,
         ForeignKey("users.user_id", ondelete="CASCADE"),
-        nullable=True,          # ✅ must be nullable now
+        nullable=True,
         unique=True
     )
 
     # Guest session (optional)
     session_id = Column(
-        String(255),            # ✅ MySQL requires length
+        String(255),
         nullable=True,
         unique=True             # prevents duplicate carts per session
     )
@@ -93,7 +93,7 @@ class Cart(Base):
     items = relationship(
         "CartItem",
         back_populates="cart",
-        cascade="all, delete-orphan"   # 🔥 better than "delete"
+        cascade="all, delete-orphan"
     )
 # =========================
 # CART ITEM
@@ -198,6 +198,8 @@ class OrderItem(Base):
     order_id = Column(Integer, ForeignKey("orders.order_id", ondelete="CASCADE"))
     product_id = Column(Integer, ForeignKey("product.product_id", ondelete="CASCADE"))
     quantity = Column(Integer, nullable=False)
+
+    unit_price = Column(Numeric(10, 2), nullable=False)
 
     order = relationship("Order", back_populates="items")
     product = relationship("Product")

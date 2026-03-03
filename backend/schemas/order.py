@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import List
@@ -24,6 +26,7 @@ class ProductInOrderResponse(BaseModel):
 
 class OrderItemResponse(BaseModel):
     quantity: int
+    unit_price: Decimal
     product: ProductInOrderResponse
 
     class Config:

@@ -85,7 +85,7 @@ const Orders = () => {
                       <div className="flex items-center gap-3 mt-1 text-xs text-(--second-text-color)">
                         <p>Quantity: {item.quantity}</p>
                         <p>|</p>
-                        <p>Price: {item.product.price} SEK</p>
+                        <p>Price: {item.unit_price} SEK</p>
                       </div>
                     </div>
                   </div>

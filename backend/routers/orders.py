@@ -71,7 +71,8 @@ def checkout(
         order_item = OrderItem(
             order_id=new_order.order_id,
             product_id=item.product_id,
-            quantity=item.quantity
+            quantity=item.quantity,
+            unit_price=item.original_price
         )
 
         db.add(order_item)

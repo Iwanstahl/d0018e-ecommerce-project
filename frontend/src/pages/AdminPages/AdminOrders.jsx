@@ -90,7 +90,7 @@ const AdminOrders = () => {
                           {item.product.name}
                         </p>
                         <p className="text-[10px] opacity-70">
-                          QTY: {item.quantity} | {item.product.price} SEK/pcs
+                          QTY: {item.quantity} | {item.unit_price} SEK/pcs
                         </p>
                       </div>
                     </div>
